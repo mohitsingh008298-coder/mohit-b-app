@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixElite | Services, Showroom & AI Part Verifier</title>
+    <!-- Google Fonts: Outfit & Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- Interactive Desktop Mockup Shell Toggle -->
+        <button class="device-frame-toggle" id="btn-toggle-frame">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <span id="frame-toggle-text">Toggle Desktop Mode (Full Screen)</span>
+        </button>
+
+        <!-- Smartphone Container -->
+        <div class="phone-container" id="phone-container">
+            <!-- Simulated Smartphone Top Notch -->
+            <div class="phone-notch">
+                <span class="time" id="sim-clock">22:16</span>
+                <div class="phone-notch-center"></div>
+                <div class="icons">
+                    <i class="fa-solid fa-signal"></i>
+                    <i class="fa-solid fa-wifi"></i>
+                    <i class="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Top Connection Alert Banner -->
+            <div class="system-status-bar" id="system-status-bar">
+                <div class="status-info">
+                    <span class="status-dot offline" id="status-dot"></span>
+                    <span class="status-text" id="status-text">Connecting server...</span>
+                </div>
+                <span class="status-badge" id="status-mode-tag">SANDBOX MODE</span>
+            </div>
+
+            <!-- Header Branding & Quick SOS -->
+            <header class="app-header">
+                <div class="brand-title">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                    </div>
+                    <span class="brand-name">FixElite</span>
+                </div>
+                <button class="header-sos-btn" id="header-sos-trigger" style="display: none;">
+                    <i class="fa-solid fa-bell"></i> SOS
+                </button>
+            </header>
+
+            <!-- Main Scrollable App Viewport -->
+            <main class="app-viewport" id="app-viewport">
+                
+                <!-- VIEW 0: LOGIN & PORTAL SELECTION -->
+                <section id="view-login" class="content-view active">
+                    <div class="view-title-block" style="text-align: center;">
+                        <div class="login-brand" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-screwdriver-wrench" style="font-size: 24px; color: var(--color-primary);"></i>
+                            <h2 style="font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">FixElite</h2>
+                        </div>
+                        <p style="font-size:11.5px;">Welcome! Select your access portal below to proceed.</p>
+                    </div>
+
+                    <div class="login-tabs" style="display: flex; gap: 8px; margin-bottom: 16px;">
+                        <button type="button" class="login-tab-btn active" id="login-tab-user" style="flex: 1; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition-smooth);">
+                            <i class="fa-solid fa-user"></i> Customer Portal
+                        </button>
+                        <button type="button" class="login-tab-btn" id="login-tab-worker" style="flex: 1; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition-smooth);">
+                            <i class="fa-solid fa-briefcase"></i> Worker Portal
+                        </button>
+                    </div>
+
+                    <!-- Customer Form -->
+                    <div class="login-card-container" id="login-form-user">
+                        <form id="form-login-user">
+                            <div class="form-group">
+                                <label for="login-user-name">Your Full Name</label>
+                                <input type="text" id="login-user-name" placeholder="e.g. Alex Johnson" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-user-phone">Phone Number</label>
+                                <input type="tel" id="login-user-phone" placeholder="e.g. +91 98765 43210" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-user-location">Your Location</label>
+                                <input type="text" id="login-user-location" placeholder="e.g. Metro City Central" value="Metro City Central" required>
+                            </div>
+                            <button type="submit" class="btn btn-cyan btn-block" style="margin-top: 10px;">
+                                <i class="fa-solid fa-right-to-bracket"></i> Access Customer Lounge
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Worker Form -->
+                    <div class="login-card-container" id="login-form-worker" style="display: none;">
+                        <form id="form-login-worker">
+                            <div class="form-group">
+                                <label for="login-worker-name">Professional Name</label>
+                                <input type="text" id="login-worker-name" placeholder="e.g. Ramesh Kumar" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-phone">Phone Number</label>
+                                <input type="tel" id="login-worker-phone" placeholder="e.g. +91 98111 22233" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-category">Trade Specialization</label>
+                                <select id="login-worker-category" required>
+                                    <option value="electrician">Electrician Services</option>
+                                    <option value="plumber">Plumbing Services</option>
+                                    <option value="bike_mechanic">Bike & Two-Wheeler Mechanic</option>
+                                    <option value="car_mechanic">Car & Four-Wheeler Mechanic</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-education">Education / Certification</label>
+                                <input type="text" id="login-worker-education" placeholder="e.g. Govt ITI Certificate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-experience">Years of Experience</label>
+                                <select id="login-worker-experience" required>
+                                    <option value="1 Year">1 Year Experience</option>
+                                    <option value="2 Years">2 Years Experience</option>
+                                    <option value="3 Years">3 Years Experience</option>
+                                    <option value="5 Years">5 Years Experience</option>
+                                    <option value="8 Years">8 Years Experience</option>
+                                    <option value="10 Years">10+ Years Experience</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-license">Govt License / ID Number</label>
+                                <input type="text" id="login-worker-license" placeholder="e.g. GOV-EL-908" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-rate">Requested Hourly Rate (₹)</label>
+                                <input type="number" id="login-worker-rate" placeholder="e.g. 200" required>
+                            </div>
+                            <div class="form-group" style="display:flex; align-items:center; gap:8px; margin: 10px 0;">
+                                <input type="checkbox" id="login-worker-pro" style="width: auto; cursor:pointer;">
+                                <label for="login-worker-pro" style="margin-bottom:0; cursor:pointer; font-size:11px; font-weight:700; color:var(--color-primary);"><i class="fa-solid fa-crown"></i> Register for Premium Pro Tier (Graduates/Engineers)</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">
+                                <i class="fa-solid fa-right-to-bracket"></i> Access Worker Portal
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- VIEW 1: SERVICES (WORKERS LIST & BOOKING) -->
+                <section id="view-workers" class="content-view">
+                    <div class="view-title-block">
+                        <h2>Find Nearest Services</h2>
+                        <p>Get guaranteed assistance from verified experienced workers.</p>
+                    </div>
+
+                    <!-- Category Pill Selector Slider -->
+                    <div class="categories-slider">
+                        <div class="category-pill active" data-category="all">
+                            <i class="fa-solid fa-grid-2"></i>
+                            <span>All</span>
+                        </div>
+                        <div class="category-pill" data-category="electrician">
+                            <i class="fa-solid fa-bolt text-warning"></i>
+                            <span>Electricians</span>
+                        </div>
+                        <div class="category-pill" data-category="plumber">
+                            <i class="fa-solid fa-faucet text-cyan"></i>
+                            <span>Plumbers</span>
+                        </div>
+                        <div class="category-pill" data-category="bike_mechanic">
+                            <i class="fa-solid fa-motorcycle text-purple"></i>
+                            <span>Bike Mechs</span>
+                        </div>
+                        <div class="category-pill" data-category="car_mechanic">
+                            <i class="fa-solid fa-car-side text-success"></i>
+                            <span>Car Mechs</span>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar & Filters Trigger -->
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="worker-search" placeholder="Search by name, skills or certification...">
+                        </div>
+                        <button class="btn-filter-trigger" id="btn-filters-toggle" title="Filters">
+                            <i class="fa-solid fa-sliders"></i>
+                        </button>
+                    </div>
+
+                    <!-- Filter Options Box -->
+                    <div class="filter-drawer" id="filter-drawer">
+                        <div class="filter-group">
+                            <label for="filter-experience">Experience</label>
+                            <select id="filter-experience">
+                                <option value="all">Any Experience</option>
+                                <option value="5">5+ Years Exp</option>
+                                <option value="10">10+ Years Exp</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-approval">Verification</label>
+                            <select id="filter-approval">
+                                <option value="all">All Workers</option>
+                                <option value="approved">Govt Approved</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-guarantee">Guarantee</label>
+                            <select id="filter-guarantee">
+                                <option value="all">Any Status</option>
+                                <option value="guaranteed">Guaranteed Only</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-price">Max Hourly Rate</label>
+                            <select id="filter-price">
+                                <option value="999">Any Budget</option>
+                                <option value="150">Max ₹150/hr</option>
+                                <option value="250">Max ₹250/hr</option>
+                                <option value="400">Max ₹400/hr</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-pro">Consultant Tier</label>
+                            <select id="filter-pro">
+                                <option value="all">All Tiers</option>
+                                <option value="pro">👑 Elite Pro Only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Workers List -->
+                    <div class="workers-list" id="workers-list">
+                        <!-- Loaded dynamically -->
+                        <div style="text-align:center; padding: 40px;" class="text-muted">
+                            <i class="fa-solid fa-circle-notch fa-spin" style="font-size:24px;"></i>
+                            <p style="margin-top:10px;">Finding closest workers...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: SHOWROOM SERVICES -->
+                <section id="view-showroom" class="content-view">
+                    <div class="view-title-block">
+                        <h2>Showroom Service Center</h2>
+                        <p>Book authorized dealership services with original parts guarantee.</p>
+                    </div>
+
+                    <div class="showroom-selector">
+                        <div class="showroom-tab active" data-vehicle="Bike" id="showroom-tab-bike">
+                            <i class="fa-solid fa-motorcycle"></i> Two-Wheelers
+                        </div>
+                        <div class="showroom-tab" data-vehicle="Car" id="showroom-tab-car">
+                            <i class="fa-solid fa-car"></i> Cars / SUVs
+                        </div>
+                    </div>
+
+                    <div class="showroom-dealers-grid" id="showroom-dealers-list">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- VIEW 3: AI PART SCANNER -->
+                <section id="view-scanner" class="content-view">
+                    <div class="view-title-block">
+                        <h2>AI Spare Part Verifier</h2>
+                        <p>Scan spare parts barcode / QR code to check if it's original company certified or counterfeit.</p>
+                    </div>
+
+                    <div class="scanner-view-container">
+                        <!-- Camera Simulation Screen -->
+                        <div class="scanner-camera-window" id="scanner-screen">
+                            <div class="scanner-laser-line" id="scanner-laser"></div>
+                            
+                            <!-- Custom Simulated Camera Grid -->
+                            <div class="scanner-overlay-box" id="scanner-target">
+                                <i class="fa-solid fa-qrcode text-muted" style="font-size:40px;" id="qr-mock-icon"></i>
+                            </div>
+
+                            <span class="scanner-placeholder-info" id="scanner-instructions">
+                                Align part QR/Barcode inside the square boundaries
+                            </span>
+                        </div>
+
+                        <!-- Scan Options Test helper -->
+                        <div style="width: 100%; text-align: left; margin-bottom: 6px;">
+                            <span style="font-size: 10px; font-weight:700; color: var(--text-dark);">CHOOSE PART STAMP TO SCAN:</span>
+                        </div>
+                        <div class="scanner-test-parts">
+                            <button class="scanner-test-btn active" data-part="honda_oil" data-status="genuine">
+                                Honda Oil Seal (Genuine)
+                            </button>
+                            <button class="scanner-test-btn" data-part="toyota_plug" data-status="counterfeit">
+                                Denso Plug (Counterfeit)
+                            </button>
+                            <button class="scanner-test-btn" data-part="suzuki_cable" data-status="genuine">
+                                Suzuki Cable (Genuine)
+                            </button>
+                        </div>
+
+                        <button class="btn btn-cyan btn-block" id="btn-start-scan" style="margin-bottom: 16px;">
+                            <i class="fa-solid fa-camera"></i> Scan QR Code
+                        </button>
+
+                        <!-- AI Report Results Card -->
+                        <div class="glass-card ai-report-card" id="ai-report-card">
+                            <div class="report-title-row">
+                                <h4 id="report-part-name">Honda Engine Oil Filter</h4>
+                                <span class="badge" id="report-badge">Genuine Part</span>
+                            </div>
+                            <div class="report-desc-item">
+                                Manufacturer: <strong id="report-manufacturer">Honda Motor Co.</strong>
+                            </div>
+                            <div class="report-desc-item">
+                                Serial Number: <strong id="report-serial">HN-78923-OIL</strong>
+                            </div>
+                            <div class="report-desc-item">
+                                Verification Hash: <strong id="report-hash" style="font-family: 'Fira Code', monospace; font-size: 9px;">0x8FA4...C2D</strong>
+                            </div>
+                            <p id="report-ai-text" style="font-size: 10.5px; margin-top: 8px; line-height: 1.4; color: var(--text-muted);">
+                                AI verified holographic seal security matrix and checked company manufacturing database logs.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: EMERGENCY SOS & ACCIDENT SENSOR -->
+                <section id="view-sos" class="content-view">
+                    <div class="view-title-block">
+                        <h2>Emergency SOS Assistant</h2>
+                        <p>Instant safety dispatch network. Broadcasters alert nearest workers, medical stations, and towing trucks.</p>
+                    </div>
+
+                    <div class="sos-view-layout">
+                        <!-- Accident Sensor Simulator Toggle -->
+                        <div class="glass-card btn-block" style="text-align: left; padding: 10px 14px; margin-bottom: 12px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <h4 style="font-size:12.5px;"><i class="fa-solid fa-triangle-exclamation text-warning"></i> Auto Accident Sensor</h4>
+                                    <p style="font-size:10px; color:var(--text-muted);">Simulate crash deceleration to trigger Auto SOS countdown.</p>
+                                </div>
+                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size:11px;" id="btn-trigger-crash">
+                                    Simulate Accident
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SOS Pulsing Circle Trigger -->
+                        <div class="sos-trigger-circle" id="sos-big-button">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>TRIGGER SOS</span>
+                        </div>
+
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 16px;">
+                            Press and hold or tap to send emergency message, current location, and connect local call dispatch.
+                        </p>
+
+                        <!-- SOS Active Countdown Display -->
+                        <div class="glass-card sos-countdown-panel btn-block" id="sos-countdown-panel">
+                            <h4 class="text-danger" style="animation: flash 1s infinite alternate;">EMERGENCY SOS INITIATING</h4>
+                            <div class="sos-timer-number" id="sos-timer-seconds">3</div>
+                            <button class="btn btn-secondary" id="btn-cancel-sos" style="padding: 6px 12px;">
+                                Cancel Alert
+                            </button>
+                        </div>
+
+                        <!-- SOS Alerts Broadcast Log -->
+                        <div class="glass-card btn-block">
+                            <h3 style="font-size:13px; margin-bottom: 8px;"><i class="fa-solid fa-list-check"></i> Active Dispatch Logs</h3>
+                            <div class="sos-alert-ticker" id="sos-ticker">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 5: WORKERS ACADEMY (UPSKILLING) -->
+                <section id="view-academy" class="content-view">
+                    <div class="view-title-block">
+                        <h2>Workers Upskilling Academy</h2>
+                        <p>Earn badges and certificate approvals to increase job search relevance.</p>
+                    </div>
+
+                    <!-- Academy Courses list -->
+                    <div id="academy-courses-list" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Loaded dynamically -->
+                    </div>
+
+                    <!-- Interactive Quiz Drawer -->
+                    <div class="glass-card quiz-drawer" id="quiz-drawer">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span class="text-purple" style="font-size:10.5px; font-weight:800;" id="quiz-course-title">EV Diagnostic Quiz</span>
+                            <button class="btn-close" id="btn-close-quiz"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div id="quiz-questions-container">
+                            <!-- Populated by JS -->
+                        </div>
+                        <button class="btn btn-primary btn-block" id="btn-submit-quiz">Submit Answers</button>
+                    </div>
+                </section>
+
+                <!-- VIEW 6: CHAT & INBOX -->
+                <section id="view-chat" class="content-view">
+                    <div class="view-title-block">
+                        <h2>Chat Inbox</h2>
+                        <p>Communicate with your scheduled workers or dealership service advisors.</p>
+                    </div>
+
+                    <div class="chat-workspace">
+                        <!-- Threads List container (visible when no active chat) -->
+                        <div class="chat-thread-list-view" id="chat-threads-list">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <!-- Main Chat Screen (visible when active chat selected) -->
+                        <div class="chat-pane" id="chat-pane-active" style="display: none;">
+                            <div class="chat-pane-header">
+                                <button class="btn-close" id="btn-back-to-threads" style="font-size: 13px;"><i class="fa-solid fa-chevron-left"></i> Back</button>
+                                <div class="chat-header-info" id="chat-header-info">
+                                    <!-- Dynamic -->
+                                </div>
+                                <div></div>
+                            </div>
+                            <div class="chat-messages-container" id="chat-messages-container">
+                                <!-- Dynamic bubbles -->
+                            </div>
+                            <form class="chat-input-area" id="chat-message-form">
+                                <input type="text" id="chat-input-text" placeholder="Type a message, ask for estimation..." autocomplete="off" required>
+                                <button type="submit" title="Send Message">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 7: PROFILE & WORKER REGISTRATION -->
+                <section id="view-profile" class="content-view">
+                    <div class="view-title-block">
+                        <h2>My Profile Portal</h2>
+                        <p>Manage account credentials, view earned badges or apply as a service worker.</p>
+                    </div>
+
+                    <!-- Profile Dashboard Summary -->
+                    <div class="glass-card">
+                        <div style="display: flex; align-items:center; gap:12px; margin-bottom: 12px;">
+                            <div class="worker-avatar" style="width: 50px; height: 50px; font-size:18px;" id="profile-avatar">AJ</div>
+                            <div>
+                                <h3 id="profile-display-name">Alex Johnson</h3>
+                                <p class="text-muted" style="font-size:11px;" id="profile-display-role">Account Type: Customer</p>
+                            </div>
+                        </div>
+
+                        <div class="profile-stats-row">
+                            <div class="stat-box">
+                                <div class="stat-value" id="profile-stat-bookings">1</div>
+                                <div class="stat-label">Bookings</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="profile-stat-badges">1</div>
+                                <div class="stat-label">Skill Badges</div>
+                            </div>
+                        </div>
+
+                        <!-- Skill Badges display -->
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-size: 10px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">VERIFIED SKILLS:</span>
+                            <div style="display:flex; flex-wrap:wrap; gap:4px;" id="profile-skill-badges">
+                                <span class="badge badge-approved"><i class="fa-solid fa-certificate"></i> Basic Wiring</span>
+                            </div>
+                        </div>
+
+                        <!-- Session Logout -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; border-top: 1px solid var(--border-light); padding-top: 12px;">
+                            <span class="text-muted" style="font-size:10.5px;">Need to switch profile?</span>
+                            <button type="button" class="btn btn-secondary" id="btn-logout" style="padding: 5px 10px; font-size:9.5px; border-radius: 20px; border-color: rgba(244,63,94,0.25); color: var(--color-danger); cursor: pointer; margin-top: 0;">
+                                <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Worker Account Application section -->
+                    <div class="glass-card" id="worker-application-card">
+                        <h3><i class="fa-solid fa-briefcase text-purple"></i> Apply as Service Worker</h3>
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 12px; line-height: 1.4;">
+                            Unemployed? Educated with vocational experience? Register details to get Government Approved license badge and connect with local users.
+                        </p>
+
+                        <form id="form-worker-register">
+                            <div class="form-group">
+                                <label for="reg-category">Select Trade Category</label>
+                                <select id="reg-category" required>
+                                    <option value="electrician">Electrician Services</option>
+                                    <option value="plumber">Plumbing Services</option>
+                                    <option value="bike_mechanic">Bike & Two-Wheeler Mechanic</option>
+                                    <option value="car_mechanic">Car & Four-Wheeler Mechanic</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-education">Education / Degree</label>
+                                <input type="text" id="reg-education" placeholder="e.g. ITI Electrical, Automobile Diploma" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-experience">Years of Experience</label>
+                                <input type="text" id="reg-experience" placeholder="e.g. 3 Years, 5 Years" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-license">Govt License / ID Number</label>
+                                <input type="text" id="reg-license" placeholder="e.g. GOV-LIC-892" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-rate">Requested Hourly Rate (₹)</label>
+                                <input type="number" id="reg-rate" placeholder="e.g. 150, 200" required>
+                            </div>
+                            <div class="form-group" style="display:flex; align-items:center; gap:8px; margin: 10px 0;">
+                                <input type="checkbox" id="reg-is-pro" style="width: auto; cursor:pointer;">
+                                <label for="reg-is-pro" style="margin-bottom:0; cursor:pointer; font-size:11.5px; font-weight:700; color:var(--color-primary);"><i class="fa-solid fa-crown"></i> Apply for Elite Pro Tier (Engineering Degree/Diploma)</label>
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-bio">Short Bio & Experience Details</label>
+                                <textarea id="reg-bio" rows="2" placeholder="Describe your specialization, past showroom/workshop experience..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+                        </form>
+                    </div>
+
+                    <!-- Worker Active Dashboard (Hidden until user becomes approved/registered worker) -->
+                    <div class="glass-card" id="worker-active-dashboard" style="display: none;">
+                        <h3 class="text-purple"><i class="fa-solid fa-id-card"></i> Worker Registry Details</h3>
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 12px;">Your details listed in public lookup searches:</p>
+                        
+                        <div style="display:flex; flex-direction:column; gap:6px; font-size:11.5px; margin-bottom: 12px;">
+                            <div>Category: <strong id="wd-category">Electrician</strong></div>
+                            <div>Education: <strong id="wd-education">ITI Diploma</strong></div>
+                            <div>Experience: <strong id="wd-experience">3 Years</strong></div>
+                            <div>License: <strong id="wd-license">GOV-891</strong></div>
+                            <div>Hourly Rate: <strong id="wd-rate">₹150/hr</strong></div>
+                            <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+                                Approval Status: <span class="badge" id="wd-badge">Pending</span>
+                            </div>
+                        </div>
+
+                        <div id="wd-admin-simulate-box" style="display:none; background: rgba(168,85,247,0.08); padding: 8px; border: 1px dashed var(--color-primary); border-radius: 6px;">
+                            <span style="font-size:10px; font-weight:700; color:var(--color-primary); display:block; margin-bottom:4px;">ADMIN VERIFICATION RADAR:</span>
+                            <button class="btn btn-cyan btn-block" style="font-size:10px; padding:4px;" id="btn-admin-approve-me">Simulate Govt ID Approval</button>
+                        </div>
+                    </div>
+
+                    <!-- Elite Pro Benefits & Gigs Lounge -->
+                    <div class="glass-card" id="worker-pro-lounge" style="display: none; border-color: rgba(250, 204, 21, 0.4); box-shadow: 0 0 15px rgba(250, 204, 21, 0.15); margin-top: 16px;">
+                        <h3 style="color: #facc15; font-size:14px;"><i class="fa-solid fa-crown"></i> Elite Pro Benefits Lounge</h3>
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 12px; line-height: 1.4;">
+                            As a highly educated specialist, you qualify for our premium worker support package.
+                        </p>
+                        
+                        <!-- Premium Benefits Grid -->
+                        <div class="pro-benefits-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; background: rgba(250, 204, 21, 0.04); padding: 12px; border-radius: 8px; border: 1px solid rgba(250, 204, 21, 0.15);">
+                            <div style="display:flex; align-items:center; gap:8px; font-size:11.5px;">
+                                <i class="fa-solid fa-shield-heart" style="color:#facc15; font-size:13px; width:16px; text-align:center;"></i>
+                                <span>Health Shield Care (Covered up to ₹5,00,000)</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px; font-size:11.5px;">
+                                <i class="fa-solid fa-screwdriver-wrench" style="color:#facc15; font-size:13px; width:16px; text-align:center;"></i>
+                                <span>Tool Allowance (₹15,000 gear subsidy)</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px; font-size:11.5px;">
+                                <i class="fa-solid fa-sack-dollar" style="color:#facc15; font-size:13px; width:16px; text-align:center;"></i>
+                                <span>Min. Wage Guarantee (₹500/hr base rate)</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px; font-size:11.5px;">
+                                <i class="fa-solid fa-user-doctor" style="color:#facc15; font-size:13px; width:16px; text-align:center;"></i>
+                                <span>Accident Protection Insurance Active</span>
+                            </div>
+                        </div>
+
+                        <!-- Open Corporate Contracts -->
+                        <h4 style="font-size: 12px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-briefcase text-cyan"></i> Brand Showroom Contract Gigs
+                        </h4>
+                        <div id="pro-showroom-gigs" style="display:flex; flex-direction:column; gap:10px;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Bottom Smartphone Tab Navigation Bar -->
+            <nav class="app-nav-bar hidden-nav">
+                <div class="nav-tab active" data-view="workers">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span>Services</span>
+                </div>
+                <div class="nav-tab" data-view="showroom">
+                    <i class="fa-solid fa-car"></i>
+                    <span>Showrooms</span>
+                </div>
+                <div class="nav-tab" data-view="scanner">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>AI Scanner</span>
+                </div>
+                <div class="nav-tab" data-view="sos">
+                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                    <span>SOS</span>
+                </div>
+                <div class="nav-tab" data-view="academy">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Academy</span>
+                </div>
+                <div class="nav-tab" data-view="chat" id="nav-tab-chat">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Inbox</span>
+                </div>
+                <div class="nav-tab" data-view="profile">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>Profile</span>
+                </div>
+            </nav>
+
+            <!-- Simulated Emergency Calling Overlay -->
+            <div class="call-overlay" id="call-overlay" style="display: none;">
+                <div class="call-glow-ring"></div>
+                <div class="call-header">
+                    <div class="emergency-badge"><i class="fa-solid fa-phone-volume"></i> EMERGENCY SERVICES</div>
+                    <div class="call-number">108</div>
+                    <div class="call-status" id="call-status">Dialing...</div>
+                </div>
+                
+                <div class="call-avatar-container">
+                    <div class="call-avatar">
+                        <i class="fa-solid fa-truck-medical text-danger"></i>
+                    </div>
+                </div>
+
+                <div class="call-timer" id="call-timer">00:00</div>
+
+                <div class="call-log-console">
+                    <div style="font-size: 8.5px; font-weight:700; color:var(--text-dark); border-bottom:1px solid var(--border-light); padding-bottom:4px; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Auto Call Log Transcript:</div>
+                    <div class="call-log-box" id="call-log-box">
+                        <!-- Transcription ticks populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="call-actions">
+                    <button class="call-btn btn-hangup" id="btn-hangup-call" title="End Call">
+                        <i class="fa-solid fa-phone-slash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Dialog Overlay -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="booking-modal-title">Book Service</h3>
+                <button class="btn-close" id="btn-close-booking"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="form-booking-submit">
+                <input type="hidden" id="booking-entity-id">
+                <input type="hidden" id="booking-entity-type">
+                
+                <div class="form-group">
+                    <label>Selected Service</label>
+                    <input type="text" id="booking-entity-name" readonly style="background: rgba(255,255,255,0.03);">
+                </div>
+                <div class="form-group" id="booking-price-group">
+                    <label>Charge / Rate</label>
+                    <input type="text" id="booking-entity-price" readonly style="background: rgba(255,255,255,0.03);">
+                </div>
+                <div class="form-group">
+                    <label for="booking-date">Schedule Date</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-time">Schedule Time</label>
+                    <select id="booking-time" required>
+                        <option value="09:00 AM">09:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="02:00 PM">02:00 PM</option>
+                        <option value="03:00 PM">03:00 PM</option>
+                        <option value="04:00 PM">04:00 PM</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 8px;">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core Logic Engine Script -->
+    <script src="app.js"></script>
+</body>
+</html>
