@@ -34,17 +34,17 @@ function playClickSound() {
     initAudioContext();
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
+
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
+
     osc.type = 'sine';
     osc.frequency.setValueAtTime(440, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.07);
-    
+
     gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
-    
+
     osc.start(audioCtx.currentTime);
     osc.stop(audioCtx.currentTime + 0.07);
   } catch (e) {
@@ -61,17 +61,17 @@ function playSuccessSound() {
       const gain = audioCtx.createGain();
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-      
+
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
-      
+
       gain.gain.setValueAtTime(0.04, audioCtx.currentTime + delay);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
-      
+
       osc.start(audioCtx.currentTime + delay);
       osc.stop(audioCtx.currentTime + delay + duration);
     };
-    
+
     playBeep(523.25, 0, 0.1); // C5
     playBeep(659.25, 0.08, 0.18); // E5
   } catch (e) {
@@ -87,14 +87,14 @@ function playWarnBeep() {
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
+
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(320, audioCtx.currentTime);
     osc.frequency.setValueAtTime(420, audioCtx.currentTime + 0.06);
-    
+
     gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
     gain.gain.setValueAtTime(0, audioCtx.currentTime + 0.12);
-    
+
     osc.start(audioCtx.currentTime);
     osc.stop(audioCtx.currentTime + 0.12);
   } catch (e) {
@@ -107,25 +107,25 @@ function startDialTone() {
   try {
     initAudioContext();
     stopDialTone();
-    
+
     const osc1 = audioCtx.createOscillator();
     const osc2 = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
+
     osc1.type = 'sine';
     osc1.frequency.value = 350;
     osc2.type = 'sine';
     osc2.frequency.value = 440;
-    
+
     gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-    
+
     osc1.connect(gain);
     osc2.connect(gain);
     gain.connect(audioCtx.destination);
-    
+
     osc1.start();
     osc2.start();
-    
+
     activeDialOsc = [osc1, osc2];
     activeDialGain = gain;
   } catch (e) {
@@ -136,12 +136,12 @@ function startDialTone() {
 function stopDialTone() {
   if (activeDialOsc) {
     activeDialOsc.forEach(o => {
-      try { o.stop(); } catch(e){}
+      try { o.stop(); } catch (e) { }
     });
     activeDialOsc = null;
   }
   if (activeDialGain) {
-    try { activeDialGain.disconnect(); } catch(e){}
+    try { activeDialGain.disconnect(); } catch (e) { }
     activeDialGain = null;
   }
 }
@@ -151,30 +151,30 @@ function startSirenSound() {
   try {
     initAudioContext();
     stopSirenSound();
-    
+
     const osc1 = audioCtx.createOscillator();
     const osc2 = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
+
     osc1.type = 'sine';
     osc2.type = 'triangle';
-    
+
     osc1.frequency.value = 800;
     osc2.frequency.value = 600;
-    
+
     gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-    
+
     osc1.connect(gain);
     osc2.connect(gain);
     gain.connect(audioCtx.destination);
-    
+
     osc1.start();
     osc2.start();
-    
+
     activeSirenOsc1 = osc1;
     activeSirenOsc2 = osc2;
     activeSirenGain = gain;
-    
+
     let frequencyFlip = false;
     activeSirenInterval = setInterval(() => {
       if (!audioCtx) return;
@@ -195,15 +195,15 @@ function stopSirenSound() {
     activeSirenInterval = null;
   }
   if (activeSirenOsc1) {
-    try { activeSirenOsc1.stop(); } catch(e){}
+    try { activeSirenOsc1.stop(); } catch (e) { }
     activeSirenOsc1 = null;
   }
   if (activeSirenOsc2) {
-    try { activeSirenOsc2.stop(); } catch(e){}
+    try { activeSirenOsc2.stop(); } catch (e) { }
     activeSirenOsc2 = null;
   }
   if (activeSirenGain) {
-    try { activeSirenGain.disconnect(); } catch(e){}
+    try { activeSirenGain.disconnect(); } catch (e) { }
     activeSirenGain = null;
   }
 }
@@ -211,7 +211,7 @@ function stopSirenSound() {
 // ==========================================================================
 // AUTHENTICATION LOGIC & PORTAL REDIRECTS
 // ==========================================================================
-window.switchLoginTab = function(role) {
+window.switchLoginTab = function (role) {
   playClickSound();
   const tabUser = document.getElementById('login-tab-user');
   const tabWorker = document.getElementById('login-tab-worker');
@@ -223,7 +223,7 @@ window.switchLoginTab = function(role) {
     tabWorker.classList.remove('active');
     formUser.style.display = 'block';
     formWorker.style.display = 'none';
-    
+
     tabUser.style.color = 'var(--text-main)';
     tabWorker.style.color = 'var(--text-muted)';
   } else {
@@ -231,30 +231,567 @@ window.switchLoginTab = function(role) {
     tabUser.classList.remove('active');
     formWorker.style.display = 'block';
     formUser.style.display = 'none';
-    
+
     tabWorker.style.color = 'var(--text-main)';
     tabUser.style.color = 'var(--text-muted)';
   }
 };
 
+// ==========================================================================
+// INTERNATIONALIZATION (i18n) DICTIONARY - 13 INDIAN LANGUAGES & ENGLISH
+// ==========================================================================
+const TRANSLATIONS = {
+  en: {
+    login_welcome: "Start by logging in with Gmail & Password, then choose your account role.",
+    select_account_role: "SELECT YOUR ACCOUNT ROLE:",
+    role_customer: "Customer (User)",
+    role_worker: "Service Worker",
+    gmail_login_title: "Gmail & Password Authentication",
+    gmail_worker_auth: "Worker Gmail Credentials & Service Data",
+    label_gmail: "Gmail Address",
+    label_password: "Password",
+    label_full_name: "Your Full Name",
+    label_phone: "Phone Number",
+    label_location: "Your Location",
+    btn_login_customer: "Login with Gmail as Customer",
+    label_worker_name: "Professional Name",
+    label_trade: "Trade Specialization",
+    label_education: "Education / Certification",
+    label_experience: "Years of Experience",
+    label_license: "Govt License / ID Number",
+    label_rate: "Requested Hourly Rate (₹)",
+    label_initial_availability: "Initial Availability Status",
+    label_pro_tier: "Register for Premium Pro Tier (Graduates/Engineers)",
+    btn_login_worker: "Login with Gmail as Worker",
+    cat_electrician: "Electrician Services",
+    cat_plumber: "Plumbing Services",
+    cat_bike: "Bike & Two-Wheeler Mechanic",
+    cat_car: "Car & Four-Wheeler Mechanic",
+    filter_availability: "Availability",
+    filter_experience: "Experience",
+    filter_approval: "Verification",
+    filter_guarantee: "Guarantee",
+    filter_price: "Max Hourly Rate",
+    filter_pro: "Consultant Tier",
+    worker_registry_details: "Worker Registry Details",
+    worker_details_sub: "Your details listed in public lookup searches:",
+    approval_status: "Approval Status",
+    my_availability_status: "MY LIVE AVAILABILITY:",
+    btn_save_status: "Save Status"
+  },
+  hi: {
+    login_welcome: "जीमेल और पासवर्ड से लॉगिन करके शुरुआत करें, फिर अपनी खाता भूमिका चुनें।",
+    select_account_role: "अपनी खाता भूमिका चुनें:",
+    role_customer: "ग्राहक (उपयोगकर्ता)",
+    role_worker: "सेवा कार्यकर्ता (वर्कर)",
+    gmail_login_title: "जीमेल और पासवर्ड प्रमाणीकरण",
+    gmail_worker_auth: "वर्कर जीमेल क्रेडेंशियल और सेवा डेटा",
+    label_gmail: "जीमेल पता",
+    label_password: "पासवर्ड",
+    label_full_name: "आपका पूरा नाम",
+    label_phone: "फोन नंबर",
+    label_location: "आपका स्थान",
+    btn_login_customer: "ग्राहक के रूप में जीमेल से लॉगिन करें",
+    label_worker_name: "पेशेवर नाम",
+    label_trade: "कार्य विशेषज्ञता",
+    label_education: "शिक्षा / प्रमाण पत्र",
+    label_experience: "अनुभव के वर्ष",
+    label_license: "सरकारी लाइसेंस / आईडी संख्या",
+    label_rate: "प्रति घंटा दर (₹)",
+    label_initial_availability: "शुरुआती उपलब्धता स्थिति",
+    label_pro_tier: "प्रीमियम प्रो श्रेणी के लिए पंजीकरण करें",
+    btn_login_worker: "वर्कर के रूप में जीमेल से लॉगिन करें",
+    cat_electrician: "इलेक्ट्रीशियन सेवाएं",
+    cat_plumber: "प्लंबिंग सेवाएं",
+    cat_bike: "बाइक और टू-व्हीलर मैकेनिक",
+    cat_car: "कार और फोर-व्हीलर मैकेनिक",
+    filter_availability: "उपलब्धता",
+    filter_experience: "अनुभव",
+    filter_approval: "सत्यापन",
+    filter_guarantee: "गारंटी",
+    filter_price: "अधिकतम दर",
+    filter_pro: "परामर्शदाता श्रेणी",
+    worker_registry_details: "वर्कर रजिस्ट्री विवरण",
+    worker_details_sub: "सार्वजनिक खोज में आपकी जानकारी:",
+    approval_status: "स्वीकृति स्थिति",
+    my_availability_status: "मेरी लाइव उपलब्धता:",
+    btn_save_status: "स्थिति सहेजें"
+  },
+  bn: {
+    login_welcome: "জিমেইল এবং পাসওয়ার্ড দিয়ে লগইন করে শুরু করুন, তারপর আপনার অ্যাকাউন্টের ভূমিকা বেছে নিন।",
+    select_account_role: "আপনার অ্যাকাউন্ট ভূমিকা নির্বাচন করুন:",
+    role_customer: "গ্রাহক (ব্যবহারকারী)",
+    role_worker: "সেবা কর্মী",
+    gmail_login_title: "জিমেইল এবং পাসওয়ার্ড অথেনটিকেশন",
+    gmail_worker_auth: "কর্মী জিমেইল তথ্য এবং সেবা ডেটা",
+    label_gmail: "জিমেইল ঠিকানা",
+    label_password: "পাসওয়ার্ড",
+    label_full_name: "আপনার পুরো নাম",
+    label_phone: "ফোন নম্বর",
+    label_location: "আপনার অবস্থান",
+    btn_login_customer: "গ্রাহক হিসেবে জিমেইল দিয়ে লগইন করুন",
+    label_worker_name: "পেশাদার নাম",
+    label_trade: "কাজের বিশেষত্ব",
+    label_education: "শিক্ষা / শংসাপত্র",
+    label_experience: "অভিজ্ঞতার বছর",
+    label_license: "সরকারি লাইসেন্স নম্বর",
+    label_rate: "প্রতি ঘণ্টার হার (₹)",
+    label_initial_availability: "প্রাথমিক প্রাপ্যতা অবস্থা",
+    label_pro_tier: "প্রিমিয়াম প্রো টায়ারে নিবন্ধন করুন",
+    btn_login_worker: "কর্মী হিসেবে জিমেইল দিয়ে লগইন করুন",
+    cat_electrician: "ইলেকট্রিশিয়ান সেবা",
+    cat_plumber: "প্লাম্বিং সেবা",
+    cat_bike: "বাইক মেকানিক",
+    cat_car: "কার মেকানিক",
+    filter_availability: "প্রাপ্যতা",
+    filter_experience: "অভিজ্ঞতা",
+    filter_approval: "যাচাইকরণ",
+    filter_guarantee: "গ্যারান্টি",
+    filter_price: "সর্বোচ্চ হার",
+    filter_pro: "পরামর্শক স্তর",
+    worker_registry_details: "কর্মী রেজিস্ট্রি বিবরণ",
+    worker_details_sub: "পাবলিক অনুসন্ধানে আপনার বিবরণ:",
+    approval_status: "অনুমোদনের অবস্থা",
+    my_availability_status: "আমার লাইভ প্রাপ্যতা:",
+    btn_save_status: "সংরক্ষণ করুন"
+  },
+  te: {
+    login_welcome: "Gmail మరియు పాస్‌వర్డ్‌తో లాగిన్ చేసి ప్రారంభించండి, ఆపై మీ ఖాతా పాత్రను ఎంచుకోండి.",
+    select_account_role: "మీ ఖాతా పాత్రను ఎంచుకోండి:",
+    role_customer: "కస్టమర్ (యూజర్)",
+    role_worker: "సర్వీస్ వర్కర్",
+    gmail_login_title: "Gmail మరియు పాస్‌వర్డ్ ప్రామాణీకరణ",
+    gmail_worker_auth: "వర్కర్ Gmail సమాచారం & సర్వీస్ డేటా",
+    label_gmail: "Gmail చిరునామా",
+    label_password: "పాస్‌వర్డ్",
+    label_full_name: "మీ పూర్తి పేరు",
+    label_phone: "ఫోన్ నంబర్",
+    label_location: "మీ ప్రాంతం",
+    btn_login_customer: "కస్టమర్‌గా Gmailతో లాగిన్ అవ్వండి",
+    label_worker_name: "వృత్తిపరమైన పేరు",
+    label_trade: "వృత్తి నైపుణ్యం",
+    label_education: "విద్య / సర్టిఫికేషన్",
+    label_experience: "అనుభవం (సంవత్సరాలు)",
+    label_license: "ప్రభుత్వ లైసెన్స్ నంబర్",
+    label_rate: "గంటకు చార్జ్ (₹)",
+    label_initial_availability: "ప్రారంభ అందుబాటు స్థితి",
+    label_pro_tier: "ప్రీమియం ప్రో టైర్ కోసం నమోదు చేసుకోండి",
+    btn_login_worker: "వర్కర్‌గా Gmailతో లాగిన్ అవ్వండి",
+    cat_electrician: "ఎలక్ట్రీషియన్ సేవలు",
+    cat_plumber: "ప్లంబింగ్ సేవలు",
+    cat_bike: "బైక్ మెకానిక్",
+    cat_car: "కార్ మెకానిక్",
+    filter_availability: "అందుబాటు",
+    filter_experience: "అనుభవం",
+    filter_approval: "ధృవీకరణ",
+    filter_guarantee: "గ్యారెంటీ",
+    filter_price: "గరిష్ట ధర",
+    filter_pro: "కన్సల్టెంట్ టైర్",
+    worker_registry_details: "వర్కర్ రిజిస్ట్రీ వివరాలు",
+    worker_details_sub: "పబ్లిక్ సెర్చ్‌లో మీ వివరాలు:",
+    approval_status: "ఆమోద స్థితి",
+    my_availability_status: "నా ప్రత్యక్ష అందుబాటు:",
+    btn_save_status: "స్థితిని సేవ్ చేయండి"
+  },
+  mr: {
+    login_welcome: "जीमेल आणि पासवर्डने लॉगिन करून सुरुवात करा, नंतर आपली खाते भूमिका निवडा.",
+    select_account_role: "आपली खाते भूमिका निवडा:",
+    role_customer: "ग्राहक (वापरकर्ता)",
+    role_worker: "सेवा कारागीर (वर्कर)",
+    gmail_login_title: "जीमेल आणि पासवर्ड प्रमाणीकरण",
+    gmail_worker_auth: "वर्कर जीमेल माहिती व सेवा डेटा",
+    label_gmail: "जीमेल पत्ता",
+    label_password: "पासवर्ड",
+    label_full_name: "आपले पूर्ण नाव",
+    label_phone: "फोन नंबर",
+    label_location: "आपले स्थान",
+    btn_login_customer: "ग्राहक म्हणून जीमेलने लॉगिन करा",
+    label_worker_name: "व्यावसायिक नाव",
+    label_trade: "कामाचे वैशिष्ट्य",
+    label_education: "शिक्षण / प्रमाणपत्र",
+    label_experience: "अनुभवाची वर्षे",
+    label_license: "शासकीय परवाना क्रमांक",
+    label_rate: "प्रति तास दर (₹)",
+    label_initial_availability: "सुरवातीची उपलब्धता",
+    label_pro_tier: "प्रीमियम प्रो टियरसाठी नोंदणी करा",
+    btn_login_worker: "वर्कर म्हणून जीमेलने लॉगिन करा",
+    cat_electrician: "इलेक्ट्रिशियन सेवा",
+    cat_plumber: "प्लंबिंग सेवा",
+    cat_bike: "बाईक मेकॅनिक",
+    cat_car: "कार मेकॅनिक",
+    filter_availability: "उपलब्धता",
+    filter_experience: "अनुभव",
+    filter_approval: "सत्यापन",
+    filter_guarantee: "गॅरंटी",
+    filter_price: "कमाल दर",
+    filter_pro: "सल्लागार टियर",
+    worker_registry_details: "वर्कर नोंदणी तपशील",
+    worker_details_sub: "सार्वजनिक शोधात आपली माहिती:",
+    approval_status: "मंजुरी स्थिती",
+    my_availability_status: "माझी थेट उपलब्धता:",
+    btn_save_status: "स्थिती जतन करा"
+  },
+  ta: {
+    login_welcome: "ஜிமெயில் மற்றும் கடவுச்சொல் மூலம் உள்நுழைந்து தொடங்கவும், பின்னர் உங்கள் கணக்கு பங்கைத் தேர்ந்தெடுக்கவும்.",
+    select_account_role: "உங்கள் கணக்கு பங்கைத் தேர்ந்தெடுக்கவும்:",
+    role_customer: "வாடிக்கையாளர் (பயனர்)",
+    role_worker: "சேவை தொழிலாளி",
+    gmail_login_title: "ஜிமெயில் மற்றும் கடவுச்சொல் அங்கீகாரம்",
+    gmail_worker_auth: "தொழிலாளி ஜிமெயில் தரவு",
+    label_gmail: "ஜிமெயில் முகவரி",
+    label_password: "கடவுச்சொல்",
+    label_full_name: "முழு பெயர்",
+    label_phone: "தொலைபேசி எண்",
+    label_location: "உங்கள் இருப்பிடம்",
+    btn_login_customer: "வாடிக்கையாளராக ஜிமெயில் மூலம் உள்நுழையவும்",
+    label_worker_name: "தொழில்முறை பெயர்",
+    label_trade: "தொழில் சிறப்பு",
+    label_education: "கல்வி / சான்றிதழ்",
+    label_experience: "அனுபவ ஆண்டுகள்",
+    label_license: "அரசு உரிம எண்",
+    label_rate: "மணிநேரக் கட்டணம் (₹)",
+    label_initial_availability: "ஆரம்பக் கிடைக்கும் நிலை",
+    label_pro_tier: "பிரிமியம் புரோ நிலைக்குப் பதிவு செய்யவும்",
+    btn_login_worker: "தொழிலாளியாக ஜிமெயில் மூலம் உள்நுழையவும்",
+    cat_electrician: "மின்சாரச் சேவைகள்",
+    cat_plumber: "பிளம்பிங் சேவைகள்",
+    cat_bike: "பைக் மெக்கானிக்",
+    cat_car: "கார் மெக்கானிக்",
+    filter_availability: "கிடைக்கும் நிலை",
+    filter_experience: "அனுபவம்",
+    filter_approval: "சரிபார்ப்பு",
+    filter_guarantee: "உத்தரவாதம்",
+    filter_price: "அதிகபட்சக் கட்டணம்",
+    filter_pro: "ஆலோசகர் நிலை",
+    worker_registry_details: "தொழிலாளி பதிவேட்டு விவரங்கள்",
+    worker_details_sub: "பொதுத் தேடலில் உங்கள் விவரங்கள்:",
+    approval_status: "ஒப்புதல் நிலை",
+    my_availability_status: "எனது நேரடி கிடைக்கும் நிலை:",
+    btn_save_status: "நிலையைச் சேமிக்கவும்"
+  },
+  ur: {
+    login_welcome: "جی میل اور پاس ورڈ کے ساتھ لاگ ان کریں، پھر اپنے اکاؤنٹ کا کردار منتخب کریں۔",
+    select_account_role: "اپنے اکاؤنٹ کا کردار منتخب کریں:",
+    role_customer: "کسٹمر (صارف)",
+    role_worker: "سروس ورکر",
+    gmail_login_title: "جی میل اور پاس ورڈ تصدیق",
+    gmail_worker_auth: "ورکر جی میل سند اور سروس ڈیٹا",
+    label_gmail: "جی میل ایڈریس",
+    label_password: "پاس ورڈ",
+    label_full_name: "آپ کا پورا نام",
+    label_phone: "فون نمبر",
+    label_location: "آپ کا مقام",
+    btn_login_customer: "کسٹمر کے طور پر جی میل سے لاگ ان کریں",
+    label_worker_name: "پیشہ ورانہ نام",
+    label_trade: "کام کی مہارت",
+    label_education: "تعلیم / سرٹیفکیٹ",
+    label_experience: "تجربے کے سال",
+    label_license: "سرماری لائسنس نمبر",
+    label_rate: "فی گھنٹہ کی شرح (₹)",
+    label_initial_availability: "ابتدائی دستیابی کی صورتحال",
+    label_pro_tier: "پریمیم پرو ٹائر کے لیے رجسٹریشن کریں",
+    btn_login_worker: "ورکر کے طور پر جی میل سے لاگ ان کریں",
+    cat_electrician: "الیکٹریشن سروسز",
+    cat_plumber: "پلمبنگ سروسز",
+    cat_bike: "بائیک مکینک",
+    cat_car: "کار مکینک",
+    filter_availability: "دستیابی",
+    filter_experience: "تجربہ",
+    filter_approval: "تصدیق",
+    filter_guarantee: "گارنٹی",
+    filter_price: "زیادہ سے زیادہ شرح",
+    filter_pro: "مشیر کا ٹائر",
+    worker_registry_details: "ورکر رجسٹری کی تفصیلات",
+    worker_details_sub: "پبلک سرچ میں آپ کی معلومات:",
+    approval_status: "منظوری کی صورتحال",
+    my_availability_status: "میری لائیو دستیابی:",
+    btn_save_status: "صورتحال محفوظ کریں"
+  },
+  gu: {
+    login_welcome: "જીમેઇલ અને પાસવર્ડ વડે લોગિન કરીને શરૂઆત કરો, પછી તમારો એકાઉન્ટ રોલ પસંદ કરો.",
+    select_account_role: "તમારો એકાઉન્ટ રોલ પસંદ કરો:",
+    role_customer: "ગ્રાહક (યુઝર)",
+    role_worker: "સર્વિસ વર્કર",
+    gmail_login_title: "જીમેઇલ અને પાસવર્ડ પ્રમાણીકરણ",
+    gmail_worker_auth: "વર્કર જીમેઇલ માહિતી અને સેવા ડેટા",
+    label_gmail: "જીમેઇલ સરનામું",
+    label_password: "પાસવર્ડ",
+    label_full_name: "તમારું પૂરું નામ",
+    label_phone: "ફોન નંબર",
+    label_location: "તમારું સ્થળ",
+    btn_login_customer: "ગ્રાહક તરીકે જીમેઇલથી લોગિન કરો",
+    label_worker_name: "વ્યાવસાયિક નામ",
+    label_trade: "કામની તજજ્ઞતા",
+    label_education: "શિક્ષણ / પ્રમાણપત્ર",
+    label_experience: "અનુભવના વર્ષો",
+    label_license: "સરકારી લાયસન્સ નંબર",
+    label_rate: "કલાકદીઠ દર (₹)",
+    label_initial_availability: "શરૂઆતની ઉપલબ્ધતા સ્થિતિ",
+    label_pro_tier: "પ્રીમિયમ પ્રો ટાયર માટે રજીસ્ટર કરો",
+    btn_login_worker: "વર્કર તરીકે જીમેઇલથી લોગિન કરો",
+    cat_electrician: "ઇલેક્ટ્રિશિયન સેવાઓ",
+    cat_plumber: "પ્લમ્બિંગ સેવાઓ",
+    cat_bike: "બાઇક મિકેનિક",
+    cat_car: "કાર મિકેનિક",
+    filter_availability: "ઉપલબ્ધતા",
+    filter_experience: "અનુભવ",
+    filter_approval: "ચકાસણી",
+    filter_guarantee: "ગેરંટી",
+    filter_price: "મહત્તમ દર",
+    filter_pro: "સલાહકાર ટાયર",
+    worker_registry_details: "વર્કર રજિસ્ટ્રી વિગતો",
+    worker_details_sub: "જાહેર શોધમાં તમારી વિગતો:",
+    approval_status: "મંજૂરી સ્થિતિ",
+    my_availability_status: "મારી લાઇન ઉપલબ્ધતા:",
+    btn_save_status: "સ્થિતિ સાચવો"
+  },
+  kn: {
+    login_welcome: "ಜಿಮೇಲ್ ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್‌ನೊಂದಿಗೆ ಲಾಗಿನ್ ಆಗಿ ಪ್ರಾರಂಭಿಸಿ, ನಂತರ ನಿಮ್ಮ ಖಾತೆಯ ಪಾತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+    select_account_role: "ನಿಮ್ಮ ಖಾತೆಯ ಪಾತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ:",
+    role_customer: "ಗ್ರಾಹಕ (ಬಳಕೆದಾರ)",
+    role_worker: "ಸೇವಾ ಕಾರ್ಮಿಕ (ವರ್ಕರ್)",
+    gmail_login_title: "ಜಿಮೇಲ್ ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಣ",
+    gmail_worker_auth: "ವರ್ಕರ್ ಜಿಮೇಲ್ ವಿವರಗಳು ಮತ್ತು ಸೇವಾ ಡೇಟಾ",
+    label_gmail: "ಜಿಮೇಲ್ ವಿಳಾಸ",
+    label_password: "ಪಾಸ್‌ವರ್ಡ್",
+    label_full_name: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು",
+    label_phone: "ಫೋನ್ ಸಂಖ್ಯೆ",
+    label_location: "ನಿಮ್ಮ ಸ್ಥಳ",
+    btn_login_customer: "ಗ್ರಾಹಕರಾಗಿ ಜಿಮೇಲ್ ಮೂಲಕ ಲಾಗಿನ್ ಆಗಿ",
+    label_worker_name: "ವೃತ್ತಿಪರ ಹೆಸರು",
+    label_trade: "ವೃತ್ತಿ ನೈಪುಣ್ಯ",
+    label_education: "ಶಿಕ್ಷಣ / ಪ್ರಮಾಣಪತ್ರ",
+    label_experience: "ಅನುಭವದ ವರ್ಷಗಳು",
+    label_license: "ಸರ್ಕಾರಿ ಲೈಸೆನ್ಸ್ ಸಂಖ್ಯೆ",
+    label_rate: "ಗಂಟೆಯ ದರ (₹)",
+    label_initial_availability: "ಆರಂಭಿಕ ಲಭ್ಯತೆಯ ಸ್ಥಿತಿ",
+    label_pro_tier: "ಪ್ರೀಮಿಯಂ ಪ್ರೋ ಹಂತಕ್ಕೆ ನೋಂದಾಯಿಸಿ",
+    btn_login_worker: "ವರ್ಕರ್ ಆಗಿ ಜಿಮೇಲ್ ಮೂಲಕ ಲಾಗಿನ್ ಆಗಿ",
+    cat_electrician: "ಎಲೆಕ್ಟ್ರೀಷಿಯನ್ ಸೇವೆಗಳು",
+    cat_plumber: "ಪ್ಲಂಬಿಂಗ್ ಸೇವೆಗಳು",
+    cat_bike: "ಬೈಕ್ ಮೆಕ್ಯಾನಿಕ್",
+    cat_car: "ಕಾರ್ ಮೆಕ್ಯಾನಿಕ್",
+    filter_availability: "ಲಭ್ಯತೆ",
+    filter_experience: "ಅನುಭವ",
+    filter_approval: "ಪರಿಶೀಲನೆ",
+    filter_guarantee: "ಗ್ಯಾರಂಟಿ",
+    filter_price: "ಗರಿಷ್ಠ ದರ",
+    filter_pro: "ಸಲಹೆಗಾರರ ಹಂತ",
+    worker_registry_details: "ವರ್ಕರ್ ನೋಂದಣಿ ವಿವರಗಳು",
+    worker_details_sub: "ಸಾರ್ವಜನಿಕ ಹುಡುಕಾಟದಲ್ಲಿ ನಿಮ್ಮ ವಿವರಗಳು:",
+    approval_status: "ಅನುಮೋದನೆ ಸ್ಥಿತಿ",
+    my_availability_status: "ನನ್ನ ಲೈವ್ ಲಭ್ಯತೆ:",
+    btn_save_status: "ಸ್ಥಿತಿಯನ್ನು ಉಳಿಸಿ"
+  },
+  or: {
+    login_welcome: "ଜିମେଲ୍ ଏବଂ ପାସୱାର୍ଡ ସହିତ ଲଗଇନ୍ କରି ଆରମ୍ଭ କରନ୍ତୁ, ତା’ପରେ ଆପଣଙ୍କର ଆକାଉଣ୍ଟ୍ ଭୂମିକା ବାଛନ୍ତୁ।",
+    select_account_role: "ଆପଣଙ୍କର ଆକାଉଣ୍ଟ୍ ଭୂମିକା ଚୟନ କରନ୍ତୁ:",
+    role_customer: "ଗ୍ରାହକ (ବ୍ୟବହାରକାରୀ)",
+    role_worker: "ସେବା କର୍ମଚାରୀ (ୱାର୍କର)",
+    gmail_login_title: "ଜିମେଲ୍ ଏବଂ ପାସୱାର୍ଡ ପ୍ରମାଣୀକରଣ",
+    gmail_worker_auth: "ୱାର୍କର ଜିମେଲ୍ ତଥ୍ୟ",
+    label_gmail: "ଜିମେଲ୍ ଠିକଣା",
+    label_password: "ପାସୱାର୍ଡ",
+    label_full_name: "ଆପଣଙ୍କ ପୂରା ନାମ",
+    label_phone: "ଫୋନ୍ ନମ୍ବର",
+    label_location: "ଆପଣଙ୍କ ସ୍ଥାନ",
+    btn_login_customer: "ଗ୍ରାହକ ଭାବରେ ଜିମେଲ୍ ଦ୍ୱାରା ଲଗଇନ୍ କରନ୍ତୁ",
+    label_worker_name: "ପେସାଦାର ନାମ",
+    label_trade: "କାର୍ଯ୍ୟ ଦକ୍ଷତା",
+    label_education: "ଶିକ୍ଷା / ପ୍ରମାଣପତ୍ର",
+    label_experience: "ଅଭିଜ୍ଞତା ବର୍ଷ",
+    label_license: "ସରକାରୀ ଲାଇସେନ୍ସ ନମ୍ବର",
+    label_rate: "ଘଣ୍ଟା ପ୍ରତି ଦର (₹)",
+    label_initial_availability: "ପ୍ରାରମ୍ଭିକ ଉପଲବ୍ଧତା ସ୍ଥିତି",
+    label_pro_tier: "ପ୍ରିମିୟମ୍ ପ୍ରୋ ସ୍ତର ପାଇଁ ପଞ୍ଜୀକରଣ କରନ୍ତୁ",
+    btn_login_worker: "ୱାର୍କର ଭାବରେ ଜିମେଲ୍ ଦ୍ୱାରା ଲଗଇନ୍ କରନ୍ତୁ",
+    cat_electrician: "ଇଲେକ୍ଟ୍ରିସିଆନ୍ ସେବା",
+    cat_plumber: "ପ୍ଲମ୍ବିଂ ସେବା",
+    cat_bike: "ବାଇକ୍ ମେକାନିକ୍",
+    cat_car: "କାର୍ ମେକାନିକ୍",
+    filter_availability: "ଉପଲବ୍ଧତା",
+    filter_experience: "ଅଭିଜ୍ଞତା",
+    filter_approval: "ଯାଞ୍ଚ",
+    filter_guarantee: "ଗ୍ୟାରେଣ୍ଟି",
+    filter_price: "ସର୍ବାଧିକ ଦର",
+    filter_pro: "ପରାମର୍ଶଦାତା ସ୍ତର",
+    worker_registry_details: "ୱାର୍କର ରେଜିଷ୍ଟ୍ରି ବିବରଣୀ",
+    worker_details_sub: "ସାଧାରଣ ଖୋଜରେ ଆପଣଙ୍କ ବିବରଣୀ:",
+    approval_status: "ଅନୁମୋଦନ ସ୍ଥିତି",
+    my_availability_status: "ମୋର ଲାଇଭ୍ ଉପଲବ୍ଧତା:",
+    btn_save_status: "ସ୍ଥିତି ସଂରକ୍ଷଣ କରନ୍ତୁ"
+  },
+  ml: {
+    login_welcome: "ജിമെയിലും പാസ്‌വേഡും ഉപയോഗിച്ച് ലോഗിൻ ചെയ്ത് ആരംഭിക്കുക, തുടർന്ന് നിങ്ങളുടെ അക്കൗണ്ട് റോൾ തിരഞ്ഞെടുക്കുക.",
+    select_account_role: "നിങ്ങളുടെ അക്കൗണ്ട് റോൾ തിരഞ്ഞെടുക്കുക:",
+    role_customer: "ഉപഭോക്താവ് (യൂസർ)",
+    role_worker: "സേവന തൊഴിലാളി (വർക്കർ)",
+    gmail_login_title: "ജിമെയിൽ & പാസ്‌വേഡ് പ്രാമാണീകരണം",
+    gmail_worker_auth: "വർക്കർ ജിമെയിൽ വിവരങ്ങൾ",
+    label_gmail: "ജിമെയിൽ വിലാസം",
+    label_password: "പാസ്‌വേഡ്",
+    label_full_name: "പൂർണ്ണമായ പേര്",
+    label_phone: "ഫോൺ നമ്പർ",
+    label_location: "നിങ്ങളുടെ സ്ഥലം",
+    btn_login_customer: "ഉപഭോക്താവായി ജിമെയിൽ വഴി ലോഗിൻ ചെയ്യുക",
+    label_worker_name: "പ്രൊഫഷണൽ പേര്",
+    label_trade: "തൊഴിൽ നൈപുണ്യം",
+    label_education: "വിദ്യാഭ്യാസം / സർട്ടിഫിക്കറ്റ്",
+    label_experience: "പ്രവൃത്തിപരിചയം (വർഷങ്ങൾ)",
+    label_license: "ഗവൺമെന്റ് ലൈസൻസ് നമ്പർ",
+    label_rate: "മണിക്കൂർ നിരക്ക് (₹)",
+    label_initial_availability: "ആദ്യ ലഭ്യത നില",
+    label_pro_tier: "പ്രീമിയം പ്രോ പ്ലാനിലേക്ക് രജിസ്റ്റർ ചെയ്യുക",
+    btn_login_worker: "വർക്കറായി ജിമെയിൽ വഴി ലോഗിൻ ചെയ്യുക",
+    cat_electrician: "ഇലക്ട്രീഷ്യൻ സേവനങ്ങൾ",
+    cat_plumber: "പ്ലംബിംഗ് സേവനങ്ങൾ",
+    cat_bike: "ബൈക്ക് മെക്കാനിക്ക്",
+    cat_car: "കാർ മെക്കാനിക്ക്",
+    filter_availability: "ലഭ്യത",
+    filter_experience: "പ്രവൃത്തിപരിചയം",
+    filter_approval: "പരിശോധന",
+    filter_guarantee: "ഗ്യാരന്റി",
+    filter_price: "പരമാവധി നിരക്ക്",
+    filter_pro: "കൺസൾട്ടന്റ് നില",
+    worker_registry_details: "വർക്കർ രജിസ്ട്രി വിവരങ്ങൾ",
+    worker_details_sub: "പൊതു തിരച്ചിലിൽ നിങ്ങളുടെ വിവരങ്ങൾ:",
+    approval_status: "അംഗീകാര നില",
+    my_availability_status: "എന്റെ തത്സമയ ലഭ്യത:",
+    btn_save_status: "സ്റ്റാറ്റസ് സേവ് ചെയ്യുക"
+  },
+  pa: {
+    login_welcome: "ਜੀਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਨਾਲ ਲੌਗਇਨ ਕਰਕੇ ਸ਼ੁਰੂਆਤ ਕਰੋ, ਫਿਰ ਆਪਣਾ ਖਾਤਾ ਰੋਲ ਚੁਣੋ।",
+    select_account_role: "ਆਪਣਾ ਖਾਤਾ ਰੋਲ ਚੁਣੋ:",
+    role_customer: "ਗਾਹਕ (ਯੂਜ਼ਰ)",
+    role_worker: "ਸੇਵਾ ਕਰਮਚਾਰੀ (ਵਰਕਰ)",
+    gmail_login_title: "ਜੀਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਪ੍ਰਮਾਣਿਕਤਾ",
+    gmail_worker_auth: "ਵਰਕਰ ਜੀਮੇਲ ਜਾਣਕਾਰੀ",
+    label_gmail: "ਜੀਮੇਲ ਪਤਾ",
+    label_password: "ਪਾਸਵਰਡ",
+    label_full_name: "ਤੁਹਾਡਾ ਪੂਰਾ ਨਾਮ",
+    label_phone: "ਫੋਨ ਨੰਬਰ",
+    label_location: "ਤੁਹਾਡਾ ਇਲਾਕਾ",
+    btn_login_customer: "ਗਾਹਕ ਵਜੋਂ ਜੀਮੇਲ ਨਾਲ ਲੌਗਇਨ ਕਰੋ",
+    label_worker_name: "ਪੇਸ਼ੇਵਰ ਨਾਮ",
+    label_trade: "ਕੰਮ ਦੀ ਮੁਹਾਰਤ",
+    label_education: "ਸਿੱਖਿਆ / ਸਰਟੀਫਿਕੇਟ",
+    label_experience: "ਤਜ਼ਰਬੇ ਦੇ ਸਾਲ",
+    label_license: "ਸਰਕਾਰੀ ਲਾਇਸੈਂਸ ਨੰਬਰ",
+    label_rate: "ਪ੍ਰਤੀ ਘੰਟਾ ਦਰ (₹)",
+    label_initial_availability: "ਸ਼ੁਰੂਆਤੀ ਉਪਲਬਧਤਾ ਸਥਿਤੀ",
+    label_pro_tier: "ਪ੍ਰੀਮੀਅਮ ਪ੍ਰੋ ਟਾਇਰ ਲਈ ਰਜਿਸਟਰ ਕਰੋ",
+    btn_login_worker: "ਵਰਕਰ ਵਜੋਂ ਜੀਮੇਲ ਨਾਲ ਲੌਗਇਨ ਕਰੋ",
+    cat_electrician: "ਇਲੈਕਟ੍ਰੀਸ਼ਨ ਸੇਵਾਵਾਂ",
+    cat_plumber: "ਪਲੰਬਿੰਗ ਸੇਵਾਵਾਂ",
+    cat_bike: "ਬਾਈਕ ਮਕੈਨਿਕ",
+    cat_car: "ਕਾਰ ਮਕੈਨਿਕ",
+    filter_availability: "ਉਪਲਬਧਤਾ",
+    filter_experience: "ਤਜ਼ਰਬਾ",
+    filter_approval: "ਪੜਤਾਲ",
+    filter_guarantee: "ਗਾਰੰਟੀ",
+    filter_price: "ਵੱਧ ਤੋਂ ਵੱਧ ਦਰ",
+    filter_pro: "ਸਲਾਹਕਾਰ ਟਾਇਰ",
+    worker_registry_details: "ਵਰਕਰ ਰਜਿਸਟਰੀ ਵੇਰਵੇ",
+    worker_details_sub: "ਜਨਤਕ ਖੋਜ ਵਿੱਚ ਤੁਹਾਡੇ ਵੇਰਵੇ:",
+    approval_status: "ਮਨਜ਼ੂਰੀ ਸਥਿਤੀ",
+    my_availability_status: "ਮੇਰੀ ਲਾਈਵ ਉਪਲਬਧਤਾ:",
+    btn_save_status: "ਸਥਿਤੀ ਸੰਭਾਲੋ"
+  },
+  as: {
+    login_welcome: "ਜੀਮੇਲ আৰু পাছৱৰ্ডৰ সৈতে লগইন কৰি আৰম্ভ কৰক, তাৰ পিছত আপোনাৰ একাউণ্টৰ ভূমিকা বাছক।",
+    select_account_role: "আপোনাৰ একাউণ্ট ভূমিকা নির্বাচন কৰক:",
+    role_customer: "গ্রাহক (ব্যৱহাৰকাৰী)",
+    role_worker: "সেৱা কৰ্মী (ৱাৰ্কাৰ)",
+    gmail_login_title: "জিমেইল আৰু পাছৱৰ্ড প্ৰমাণীকৰণ",
+    gmail_worker_auth: "ৱাৰ্কাৰ জিমেইল তথ্য",
+    label_gmail: "জিমেইল ঠিকনা",
+    label_password: "পাছৱৰ্ড",
+    label_full_name: "আপোনাৰ সম্পূৰ্ণ নাম",
+    label_phone: "ফোন নম্বৰ",
+    label_location: "আপোনাৰ স্থান",
+    btn_login_customer: "গ্রাহক হিচাপে জিমেইলৰ সৈতে লগইন কৰক",
+    label_worker_name: "পেশাদাৰী নাম",
+    label_trade: "কামৰ বিশেষত্ব",
+    label_education: "শিক্ষা / প্ৰমাণপত্ৰ",
+    label_experience: "অভিজ্ঞতাৰ বছৰ",
+    label_license: "চৰকাৰী লাইসেন্স নম্বৰ",
+    label_rate: "প্ৰতি ঘণ্টাৰ দৰ (₹)",
+    label_initial_availability: "প্ৰাৰম্ভিক উপলব্ধতা স্থিতি",
+    label_pro_tier: "প্ৰিমিয়াম প্ৰ' স্তৰৰ বাবে পঞ্জীয়ন কৰক",
+    btn_login_worker: "ৱাৰ্কাৰ হিচাপে জিমেইলৰ সৈতে লগইন কৰক",
+    cat_electrician: "ইলেকট্ৰিচিয়ান সেৱা",
+    cat_plumber: "প্লাম্বিং সেৱা",
+    cat_bike: "বাইক মেকানিক",
+    cat_car: "কাৰ মেকানিক",
+    filter_availability: "উপলব্ধতা",
+    filter_experience: "অভিজ্ঞতা",
+    filter_approval: "যাচাইকৰণ",
+    filter_guarantee: "গেৰান্টি",
+    filter_price: "সর্বোচ্চ দৰ",
+    filter_pro: "পৰামৰ্শদাতা স্তৰ",
+    worker_registry_details: "ৱাৰ্কাৰ ৰেজিস্ট্ৰী বিৱৰণ",
+    worker_details_sub: "ৰাজহুৱা সন্ধানত আপোনাৰ তথ্য:",
+    approval_status: "অনুমোদন স্থিতি",
+    my_availability_status: "মোৰ লাইভ উপলব্ধতা:",
+    btn_save_status: "স্থিতি সংৰক্ষণ কৰক"
+  }
+};
+
+function currentLang() {
+  return localStorage.getItem('fixelite_lang') || 'en';
+}
+
+function setLanguage(lang) {
+  if (!TRANSLATIONS[lang]) lang = 'en';
+  localStorage.setItem('fixelite_lang', lang);
+
+  const dict = TRANSLATIONS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      el.textContent = dict[key];
+    }
+  });
+
+  const langSelect = document.getElementById('app-language-select');
+  if (langSelect && langSelect.value !== lang) {
+    langSelect.value = lang;
+  }
+}
+
+function initLanguageSelector() {
+  const langSelect = document.getElementById('app-language-select');
+  if (langSelect) {
+    langSelect.value = currentLang();
+    langSelect.addEventListener('change', (e) => {
+      setLanguage(e.target.value);
+      renderWorkersList();
+      populateProfileDashboard();
+    });
+  }
+  setLanguage(currentLang());
+}
+
 async function loginUser(details) {
   if (isOfflineMode) {
     const db = getLocalDB();
-    const { role, name, phone, category, education, experience, licenseNumber, hourlyRate } = details;
-    
+    const { role, name, phone, email, category, education, experience, licenseNumber, hourlyRate, isAvailable, availabilityStatus, isElitePro } = details;
+
     const avatar = name.split(' ').map(n => n[0]).join('').toUpperCase();
-    
+    const gmail = email || (name.toLowerCase().replace(/\s+/g, '.') + '@gmail.com');
+
     if (role === 'Worker') {
       let worker = db.workers.find(w => w.name.toLowerCase() === name.toLowerCase() || (licenseNumber && w.licenseNumber === licenseNumber));
       if (!worker) {
         worker = {
           id: "worker_" + Date.now(),
           name,
+          email: gmail,
           category: category || "electrician",
-          role: (category || "electrician").charAt(0).toUpperCase() + (category || "electrician").slice(1) + " Expert",
+          role: isElitePro ? "Elite Pro Consultant" : ((category || "electrician").charAt(0).toUpperCase() + (category || "electrician").slice(1) + " Expert"),
           experience: experience || "1 Year",
           education: education || "Diploma Certificate",
-          bio: "Registered professional worker ready to assist.",
+          bio: isElitePro ? "High-End Engineering Consultant & Diagnostics Architect." : "Registered professional worker ready to assist.",
           avatar,
           phone,
           rating: 5.0,
@@ -262,29 +799,41 @@ async function loginUser(details) {
           hourlyRate: parseInt(hourlyRate) || 150,
           approved: true,
           guaranteed: true,
-          licenseNumber: licenseNumber || "GOV-LIC-" + Math.floor(Math.random() * 900 + 100)
+          licenseNumber: licenseNumber || "GOV-LIC-" + Math.floor(Math.random() * 900 + 100),
+          isElitePro: !!isElitePro,
+          isAvailable: isAvailable !== undefined ? !!isAvailable : true,
+          availabilityStatus: availabilityStatus || "Available Now"
         };
         db.workers.push(worker);
+      } else {
+        if (isAvailable !== undefined) worker.isAvailable = !!isAvailable;
+        if (availabilityStatus !== undefined) worker.availabilityStatus = availabilityStatus;
       }
       db.currentUser = {
         id: worker.id,
         name: worker.name,
+        email: worker.email || gmail,
         role: "Worker",
         avatar: worker.avatar,
         phone: worker.phone,
         location: "Metro City Central",
-        skills: ["Certified Specialist"],
+        skills: worker.isElitePro ? ["Certified Specialist", "Advanced Diagnostics"] : ["Certified Specialist"],
         isWorkerApproved: worker.approved,
         education: worker.education,
         experience: worker.experience,
         category: worker.category,
         licenseNumber: worker.licenseNumber,
-        hourlyRate: worker.hourlyRate
+        hourlyRate: worker.hourlyRate,
+        isElitePro: worker.isElitePro,
+        isAvailable: worker.isAvailable,
+        availabilityStatus: worker.availabilityStatus || "Available Now",
+        appliedGigs: []
       };
     } else {
       db.currentUser = {
         id: "user_" + Date.now(),
         name,
+        email: gmail,
         role: "Customer",
         avatar,
         phone,
@@ -295,10 +844,14 @@ async function loginUser(details) {
         experience: "",
         category: "",
         licenseNumber: "",
-        hourlyRate: ""
+        hourlyRate: "",
+        isElitePro: false,
+        isAvailable: true,
+        availabilityStatus: "Customer Account",
+        appliedGigs: []
       };
     }
-    
+
     saveLocalDB(db);
     return db.currentUser;
   }
@@ -315,12 +868,47 @@ async function loginUser(details) {
   }
 }
 
+async function toggleWorkerAvailability(isAvailable, availabilityStatus) {
+  if (isOfflineMode) {
+    const db = getLocalDB();
+    if (db.currentUser) {
+      db.currentUser.isAvailable = isAvailable;
+      db.currentUser.availabilityStatus = availabilityStatus;
+
+      const worker = db.workers.find(w => w.id === db.currentUser.id || w.licenseNumber === db.currentUser.licenseNumber);
+      if (worker) {
+        worker.isAvailable = isAvailable;
+        worker.availabilityStatus = availabilityStatus;
+      }
+    }
+    saveLocalDB(db);
+    state.currentUser = db.currentUser;
+    state.workers = db.workers;
+    return { success: true, currentUser: db.currentUser };
+  }
+  try {
+    const targetId = state.currentUser.id || "me";
+    const res = await fetch(`${API_BASE}/workers/${targetId}/availability`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ isAvailable, availabilityStatus })
+    });
+    const data = await res.json();
+    await syncAppState();
+    return data;
+  } catch (e) {
+    enableOfflineMode();
+    return toggleWorkerAvailability(isAvailable, availabilityStatus);
+  }
+}
+
 async function logoutUser() {
   if (isOfflineMode) {
     const db = getLocalDB();
     db.currentUser = {
       id: "",
       name: "",
+      email: "",
       role: "",
       avatar: "",
       phone: "",
@@ -331,7 +919,11 @@ async function logoutUser() {
       experience: "",
       category: "",
       licenseNumber: "",
-      hourlyRate: ""
+      hourlyRate: "",
+      isElitePro: false,
+      isAvailable: false,
+      availabilityStatus: "Offline",
+      appliedGigs: []
     };
     saveLocalDB(db);
     return { success: true };
@@ -348,13 +940,13 @@ async function logoutUser() {
 // --- Default Data Structure (Used for local sandbox fallback & initialization) ---
 const DEFAULT_DB = {
   currentUser: {
-    id: "user",
-    name: "Alex Johnson",
-    role: "Customer",
-    avatar: "AJ",
-    phone: "+91 98765 43210",
-    location: "Metro City Central",
-    skills: ["Basic Wiring"],
+    id: "",
+    name: "",
+    role: "",
+    avatar: "",
+    phone: "",
+    location: "",
+    skills: [],
     isWorkerApproved: false,
     education: "",
     experience: "",
@@ -737,7 +1329,7 @@ async function registerAsWorker(details) {
       licenseNumber: details.licenseNumber || "PENDING-" + Math.floor(Math.random() * 900 + 100)
     };
     db.workers.push(newWorker);
-    
+
     db.currentUser.role = "Worker";
     db.currentUser.isWorkerApproved = false;
     db.currentUser.licenseNumber = newWorker.licenseNumber;
@@ -745,7 +1337,7 @@ async function registerAsWorker(details) {
     db.currentUser.experience = newWorker.experience;
     db.currentUser.category = newWorker.category;
     db.currentUser.hourlyRate = newWorker.hourlyRate;
-    
+
     saveLocalDB(db);
     return { success: true, worker: newWorker };
   }
@@ -815,7 +1407,7 @@ async function createBooking(bookingData) {
     const db = getLocalDB();
     let newBooking = {};
     const { type, entityId, date, time } = bookingData;
-    
+
     if (type === 'worker') {
       const worker = db.workers.find(w => w.id === entityId);
       newBooking = {
@@ -829,7 +1421,7 @@ async function createBooking(bookingData) {
         time,
         status: "Confirmed"
       };
-      
+
       db.messages.push({
         senderId: worker.id,
         receiverId: "user",
@@ -850,7 +1442,7 @@ async function createBooking(bookingData) {
         status: "Confirmed"
       };
     }
-    
+
     db.bookings.push(newBooking);
     saveLocalDB(db);
     return newBooking;
@@ -976,7 +1568,7 @@ async function sendMessage(receiverId, content) {
       timestamp: new Date().toISOString()
     };
     db.messages.push(msg);
-    
+
     // Auto simulated bot response after a delay
     const worker = db.workers.find(w => w.id === receiverId);
     if (worker) {
@@ -992,7 +1584,7 @@ async function sendMessage(receiverId, content) {
         if (state.activeChatId === receiverId) renderChatConversation();
       }, 1500);
     }
-    
+
     saveLocalDB(db);
     return msg;
   }
@@ -1032,12 +1624,12 @@ async function syncAppState() {
   state.bookings = await fetchBookings();
   state.courses = await fetchCourses();
   state.sosAlerts = await fetchSOSAlerts();
-  
-  // Update logged-in state based on whether currentUser has a name
+
+  // Update logged-in state based on whether currentUser has a valid ID and Name
   const navBar = document.querySelector('.app-nav-bar');
   const sosHeader = document.getElementById('header-sos-trigger');
-  
-  if (state.currentUser && state.currentUser.name && state.currentUser.name.trim() !== "") {
+
+  if (state.currentUser && state.currentUser.id && state.currentUser.id.trim() !== "" && state.currentUser.name && state.currentUser.name.trim() !== "") {
     state.isLoggedIn = true;
     if (navBar) navBar.classList.remove('hidden-nav');
     if (sosHeader) sosHeader.style.display = 'inline-block';
@@ -1046,7 +1638,7 @@ async function syncAppState() {
     if (navBar) navBar.classList.add('hidden-nav');
     if (sosHeader) sosHeader.style.display = 'none';
   }
-  
+
   // Render general layout settings
   updateProfileUI();
 }
@@ -1090,7 +1682,7 @@ function initViewRouter() {
       navigateToView(targetView);
     });
   });
-  
+
   // Quick SOS header button triggers views
   const headerSos = document.getElementById('header-sos-trigger');
   if (headerSos) {
@@ -1105,7 +1697,7 @@ function navigateToView(viewName) {
     viewName = 'login';
   }
   state.activeView = viewName;
-  
+
   // Update tabs active state
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.classList.remove('active');
@@ -1120,7 +1712,7 @@ function navigateToView(viewName) {
   });
   const viewEl = document.getElementById(`view-${viewName}`);
   if (viewEl) viewEl.classList.add('active');
-  
+
   // Trigger specific renders
   if (viewName === 'login') {
     stopSirenSound();
@@ -1157,6 +1749,7 @@ function initWorkersFilterLogic() {
   }
 
   // Filter change actions
+  const selectAvail = document.getElementById('filter-availability');
   const selectExp = document.getElementById('filter-experience');
   const selectAppr = document.getElementById('filter-approval');
   const selectGuar = document.getElementById('filter-guarantee');
@@ -1166,16 +1759,18 @@ function initWorkersFilterLogic() {
 
   const onFilterChange = () => {
     state.filters = {
-      search: inputSearch.value,
-      experience: selectExp.value,
-      approval: selectAppr.value,
-      guarantee: selectGuar.value,
-      price: parseInt(selectPrice.value) || 999,
+      search: inputSearch ? inputSearch.value : "",
+      availability: selectAvail ? selectAvail.value : "all",
+      experience: selectExp ? selectExp.value : "all",
+      approval: selectAppr ? selectAppr.value : "all",
+      guarantee: selectGuar ? selectGuar.value : "all",
+      price: selectPrice ? (parseInt(selectPrice.value) || 999) : 999,
       pro: selectPro ? selectPro.value : "all"
     };
     renderWorkersList();
   };
 
+  if (selectAvail) selectAvail.addEventListener('change', onFilterChange);
   if (selectExp) selectExp.addEventListener('change', onFilterChange);
   if (selectAppr) selectAppr.addEventListener('change', onFilterChange);
   if (selectGuar) selectGuar.addEventListener('change', onFilterChange);
@@ -1187,7 +1782,7 @@ function initWorkersFilterLogic() {
 async function renderWorkersList() {
   const container = document.getElementById('workers-list');
   if (!container) return;
-  
+
   state.workers = await fetchWorkers();
   let list = [...state.workers];
 
@@ -1197,7 +1792,7 @@ async function renderWorkersList() {
   }
 
   // 2. Filter Search input
-  if (state.filters.search.trim() !== '') {
+  if (state.filters.search && state.filters.search.trim() !== '') {
     const q = state.filters.search.toLowerCase();
     list = list.filter(w =>
       w.name.toLowerCase().includes(q) ||
@@ -1207,8 +1802,13 @@ async function renderWorkersList() {
     );
   }
 
+  // 2b. Filter Availability
+  if (state.filters.availability === 'available') {
+    list = list.filter(w => w.isAvailable !== false);
+  }
+
   // 3. Filter Experience Years
-  if (state.filters.experience !== 'all') {
+  if (state.filters.experience && state.filters.experience !== 'all') {
     const minYears = parseInt(state.filters.experience);
     list = list.filter(w => parseInt(w.experience) >= minYears);
   }
@@ -1224,7 +1824,9 @@ async function renderWorkersList() {
   }
 
   // 6. Filter Max Price rate
-  list = list.filter(w => w.hourlyRate <= state.filters.price);
+  if (state.filters.price) {
+    list = list.filter(w => w.hourlyRate <= state.filters.price);
+  }
 
   // 6b. Filter Pro Tiers
   if (state.filters.pro === 'pro') {
@@ -1232,7 +1834,7 @@ async function renderWorkersList() {
   }
 
   container.innerHTML = '';
-  
+
   if (list.length === 0) {
     container.innerHTML = `
       <div style="text-align:center; padding: 40px;" class="text-muted">
@@ -1246,9 +1848,15 @@ async function renderWorkersList() {
   list.forEach(worker => {
     const card = document.createElement('div');
     card.className = worker.isElitePro ? 'glass-card worker-card elite-pro-card' : 'glass-card worker-card';
-    
+
     // Badges block
     let badgesHTML = '';
+    if (worker.isAvailable !== false) {
+      badgesHTML += `<span class="badge badge-available"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ${worker.availabilityStatus || 'Available Now'}</span> `;
+    } else {
+      badgesHTML += `<span class="badge badge-unavailable"><i class="fa-solid fa-circle-xmark"></i> ${worker.availabilityStatus || 'Unavailable'}</span> `;
+    }
+
     if (worker.isElitePro) {
       badgesHTML += `<span class="badge badge-elite"><i class="fa-solid fa-crown"></i> Elite Pro</span> `;
     }
@@ -1307,12 +1915,12 @@ function initShowroomTabs() {
 function renderShowrooms() {
   const container = document.getElementById('showroom-dealers-list');
   if (!container) return;
-  
+
   const seedServices = DEFAULT_DB.showroomServices; // using local seed config lists
   const filtered = seedServices.filter(s => s.vehicle === state.activeShowroomTab);
-  
+
   container.innerHTML = '';
-  
+
   filtered.forEach(service => {
     const card = document.createElement('div');
     card.className = 'glass-card showroom-card';
@@ -1342,13 +1950,13 @@ function openBookingModal(type, id, name, priceText) {
   const inputType = document.getElementById('booking-entity-type');
   const inputName = document.getElementById('booking-entity-name');
   const inputPrice = document.getElementById('booking-entity-price');
-  
+
   if (modalTitle) modalTitle.textContent = type === 'worker' ? 'Book Local Worker' : 'Schedule Showroom Service';
   if (inputId) inputId.value = id;
   if (inputType) inputType.value = type;
   if (inputName) inputName.value = name;
   if (inputPrice) inputPrice.value = priceText;
-  
+
   // Set default tomorrow's date
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1380,10 +1988,10 @@ function initBookingModalLogic() {
       try {
         await createBooking({ type, entityId, date, time });
         if (modal) modal.classList.remove('active');
-        
+
         // Show simulated toast alert
         alert(`Success! Service booked for ${date} at ${time}.`);
-        
+
         // Refresh bookings and navigate
         await syncAppState();
         navigateToView('profile');
@@ -1422,7 +2030,7 @@ function initAIScannerLogic() {
       if (mockIcon) {
         mockIcon.className = "fa-solid fa-network-wired text-cyan fa-spin";
       }
-      
+
       // Start Sweep line animation
       if (laser) laser.style.display = 'block';
       scanBtn.disabled = true;
@@ -1434,7 +2042,7 @@ function initAIScannerLogic() {
         scanBtn.disabled = false;
         if (instructions) instructions.textContent = "Scan Complete. AI verification details below:";
         if (mockIcon) mockIcon.className = "fa-solid fa-square-check text-success";
-        
+
         // Process AI validation based on test selections
         displayAIReport();
       }, 2000);
@@ -1502,10 +2110,14 @@ function initEmergencySOSLogic() {
   const countdownPanel = document.getElementById('sos-countdown-panel');
   const timerText = document.getElementById('sos-timer-seconds');
   const cancelBtn = document.getElementById('btn-cancel-sos');
+  const fireSensorBtn = document.getElementById('btn-trigger-fire-sensor');
   const crashBtn = document.getElementById('btn-trigger-crash');
 
-  // 108 Call UI Elements
+  // Call UI Elements
   const callOverlay = document.getElementById('call-overlay');
+  const callBadgeTitle = document.getElementById('call-badge-title');
+  const callNumberDisplay = document.getElementById('call-number-display');
+  const callAvatarIcon = document.getElementById('call-avatar-icon');
   const callStatusText = document.getElementById('call-status');
   const callTimerText = document.getElementById('call-timer');
   const callLogBox = document.getElementById('call-log-box');
@@ -1516,58 +2128,57 @@ function initEmergencySOSLogic() {
   let speakTimeouts = [];
 
   const startSOSCountdown = (triggerType) => {
-    // Clean previous timers
     if (state.activeSOSInterval) {
       clearInterval(state.activeSOSInterval);
     }
-    
-    // Set titles appropriately
-    const panelTitle = countdownPanel.querySelector('h4');
-    if (triggerType.includes('Accident')) {
-      panelTitle.textContent = "ACCIDENT CRASH DETECTED! DIALING 108 IN";
-      state.sosTimerValue = 5; // 5 seconds warning countdown for crash calls
+
+    const panelTitle = document.getElementById('sos-countdown-title') || countdownPanel.querySelector('h4');
+    if (triggerType === 'Home Electrical Fire Sensor') {
+      if (panelTitle) panelTitle.textContent = "ELECTRICAL FIRE DETECTED! DIALING 101/108 IN";
+      state.sosTimerValue = 4;
+    } else if (triggerType.includes('Crash') || triggerType.includes('Vehicle')) {
+      if (panelTitle) panelTitle.textContent = "ACCIDENT IMPACT DETECTED! DIALING 108 IN";
+      state.sosTimerValue = 4;
     } else {
-      panelTitle.textContent = "EMERGENCY SOS INITIATING";
+      if (panelTitle) panelTitle.textContent = "EMERGENCY SOS INITIATING";
       state.sosTimerValue = 3;
     }
-    
+
     if (timerText) timerText.textContent = state.sosTimerValue;
     if (countdownPanel) countdownPanel.style.display = 'flex';
     if (sosBtn) sosBtn.classList.add('active');
 
-    // Initial warning beep
     playWarnBeep();
 
     state.activeSOSInterval = setInterval(async () => {
       state.sosTimerValue--;
       if (timerText) timerText.textContent = state.sosTimerValue;
-      
-      // Warning tick sound
+
       playWarnBeep();
-      
+
       if (state.sosTimerValue <= 0) {
         clearInterval(state.activeSOSInterval);
         state.activeSOSInterval = null;
         if (countdownPanel) countdownPanel.style.display = 'none';
         if (sosBtn) sosBtn.classList.remove('active');
-        
-        // Execute SOS broadcast
+
         try {
-          const alertObj = await triggerSOSAlert(
-            "G-Road High Speed Highway (19.0760° N, 72.8777° E)",
-            triggerType
-          );
-          
+          let locationStr = "Sector 15 Cross Road (19.0760° N, 72.8777° E)";
+          if (triggerType === 'Home Electrical Fire Sensor') {
+            locationStr = "Home Electrical Panel - Sector 15 Residence Node #104";
+          } else if (triggerType.includes('Vehicle') || triggerType.includes('Crash')) {
+            locationStr = "Highway Expressway Mile 24 (Crash Impact Point)";
+          }
+
+          const alertObj = await triggerSOSAlert(locationStr, triggerType);
           await syncAppState();
           renderSOSLogs();
-          
-          if (triggerType.includes('Accident')) {
-            // Trigger Automatic 108 Calling Screen Overlay
-            trigger108EmergencyCall();
+
+          if (triggerType === 'Home Electrical Fire Sensor' || triggerType.includes('Vehicle') || triggerType.includes('Crash')) {
+            triggerEmergencyCallOverlay(triggerType);
           } else {
-            // Play continuous manual SOS siren sound
             startSirenSound();
-            alert(`EMERGENCY SOS SENT! Broadcasting coordinates to Ambulance Dispatch and nearby workers. (Siren alarm active. Press CANCEL to stop alarm).`);
+            alert(`EMERGENCY SOS SENT! Broadcasting coordinates to Emergency Services and nearby registered workers. (Siren alarm active. Press CANCEL to stop alarm).`);
           }
         } catch (e) {
           console.error(e);
@@ -1576,34 +2187,40 @@ function initEmergencySOSLogic() {
     }, 1000);
   };
 
-  const trigger108EmergencyCall = () => {
-    // Show 108 Call Overlay
+  const triggerEmergencyCallOverlay = (triggerType) => {
     if (callOverlay) {
       callOverlay.style.display = 'flex';
       callOverlay.style.animation = 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards';
     }
-    
+
+    if (triggerType === 'Home Electrical Fire Sensor') {
+      if (callBadgeTitle) callBadgeTitle.innerHTML = `<i class="fa-solid fa-fire-flame-curved"></i> FIRE BRIGADE (101) & AMBULANCE`;
+      if (callNumberDisplay) callNumberDisplay.textContent = "101 / 108";
+      if (callAvatarIcon) callAvatarIcon.innerHTML = `<i class="fa-solid fa-fire-flame-curved text-danger"></i>`;
+    } else {
+      if (callBadgeTitle) callBadgeTitle.innerHTML = `<i class="fa-solid fa-car-burst"></i> TOWING DISPATCH & AMBULANCE`;
+      if (callNumberDisplay) callNumberDisplay.textContent = "108";
+      if (callAvatarIcon) callAvatarIcon.innerHTML = `<i class="fa-solid fa-car-burst text-warning"></i>`;
+    }
+
     if (callStatusText) {
-      callStatusText.textContent = "Dialing...";
+      callStatusText.textContent = "Dialing Emergency Hotline...";
       callStatusText.classList.remove('active-call');
     }
     if (callTimerText) callTimerText.textContent = "00:00";
     if (callLogBox) callLogBox.innerHTML = '';
-    
-    // Play telephone connection tones
+
     startDialTone();
-    
-    // Simulate connection delay of 2.5 seconds
+
     const connectionTimeout = setTimeout(() => {
       stopDialTone();
-      playSuccessSound(); // chime pickup sound
-      
+      playSuccessSound();
+
       if (callStatusText) {
-        callStatusText.textContent = "Connected";
+        callStatusText.textContent = "Connected to Emergency Dispatch";
         callStatusText.classList.add('active-call');
       }
-      
-      // Start call clock
+
       callTimeElapsed = 0;
       callTimerInterval = setInterval(() => {
         callTimeElapsed++;
@@ -1614,66 +2231,85 @@ function initEmergencySOSLogic() {
         if (callTimerText) callTimerText.textContent = `${min}:${sec}`;
       }, 1000);
 
-      // Stream call dialogue transcription
       const addLog = (speaker, text, styleClass) => {
         if (!callLogBox) return;
         const entry = document.createElement('div');
-        entry.className = `log-entry ${styleClass}`;
+        entry.className = `log-entry ${styleClass || ''}`;
         entry.innerHTML = `<strong>${speaker}:</strong> ${text}`;
         callLogBox.appendChild(entry);
         callLogBox.scrollTop = callLogBox.scrollHeight;
       };
 
-      // 0s log: Dispatcher
-      addLog("108 Dispatcher", "Emergency call received. Ambulance Dispatch Central, what is your location?", "dispatcher");
-      playWarnBeep(); // dispatcher radio sound
+      const username = state.currentUser && state.currentUser.name ? state.currentUser.name : "Alex Johnson";
 
-      // 3.5s log: Automated Accident telemetry
-      const t1 = setTimeout(() => {
-        const username = state.currentUser ? state.currentUser.name : "Alex Johnson";
-        addLog("AI Accident Sensor", `CRASH DETECTED. Telemetry: Deceleration impact of 9.8G registered. Vehicle Owner: ${username}. Coordinates: G-Road High Speed Highway (19.0760° N, 72.8777° E). Sending GPS map data now...`, "car-system");
+      if (triggerType === 'Home Electrical Fire Sensor') {
+        addLog("101 Fire Control", "Emergency Fire & Rescue Central 101. State your emergency and location.", "dispatcher");
         playWarnBeep();
-      }, 3500);
-      speakTimeouts.push(t1);
 
-      // 7.5s log: Dispatcher response
-      const t2 = setTimeout(() => {
-        addLog("108 Dispatcher", "Coordinates received and mapped. Dispatching emergency trauma ambulance and highway patrol rescue. En route immediately. ETA 4 minutes. Please stay on the line.", "dispatcher");
-        playWarnBeep();
-      }, 7500);
-      speakTimeouts.push(t2);
+        const t1 = setTimeout(() => {
+          addLog("Home IoT Thermal Sensor", `SHORT CIRCUIT & ELECTRICAL FIRE DETECTED! Thermal Arc Spike registered on Main Switchboard. Resident: ${username}. Address: Sector 15 Residence Node #104. Sending GPS coordinates now...`, "car-system");
+          playWarnBeep();
+        }, 3000);
+        speakTimeouts.push(t1);
 
-      // 11s log: AI confirmation
-      const t3 = setTimeout(() => {
-        addLog("System Telemetry", "Emergency dispatch route locked. Direct phone line active.", "car-system");
+        const t2 = setTimeout(() => {
+          addLog("101 Fire Control", "Coordinates verified. Fire Engine Unit #4 and Ambulance 108 dispatched! ETA 3.5 minutes. Evacuate premises immediately.", "dispatcher");
+          playWarnBeep();
+        }, 6500);
+        speakTimeouts.push(t2);
+
+        const t3 = setTimeout(() => {
+          addLog("FixElite Dispatch Radar", "Auto-alerted nearest certified Electricians Ramesh Kumar (+91 98111 22233) and Vikram Aditya for emergency circuit breaker isolation.", "car-system");
+          playWarnBeep();
+        }, 9500);
+        speakTimeouts.push(t3);
+
+      } else {
+        addLog("108 Trauma Dispatch", "Emergency Highway Dispatch 108. Telemetry signal received.", "dispatcher");
         playWarnBeep();
-      }, 11000);
-      speakTimeouts.push(t3);
-      
+
+        const t1 = setTimeout(() => {
+          addLog("Vehicle Collision Sensor", `G-FORCE CRASH DETECTED! Deceleration impact of 9.8G registered. Driver: ${username}. Location: Highway Expressway Mile 24. Sending GPS location...`, "car-system");
+          playWarnBeep();
+        }, 3000);
+        speakTimeouts.push(t1);
+
+        const t2 = setTimeout(() => {
+          addLog("108 Trauma Dispatch", "Trauma Care Ambulance & Hydraulic Towing Unit dispatched! En route immediately.", "dispatcher");
+          playWarnBeep();
+        }, 6500);
+        speakTimeouts.push(t2);
+
+        const t3 = setTimeout(() => {
+          addLog("FixElite Dispatch Radar", "Auto-notified nearest certified Car Mechanic Sarah D'Souza (+91 98444 55566) & Bike Mechanic Amit Patel for vehicle towing and roadside assistance.", "car-system");
+          playWarnBeep();
+        }, 9500);
+        speakTimeouts.push(t3);
+      }
+
     }, 2500);
-    
+
     speakTimeouts.push(connectionTimeout);
   };
 
   const hangUpEmergencyCall = () => {
     stopDialTone();
     stopSirenSound();
-    
+
     if (callTimerInterval) {
       clearInterval(callTimerInterval);
       callTimerInterval = null;
     }
-    
+
     speakTimeouts.forEach(t => clearTimeout(t));
     speakTimeouts = [];
-    
+
     if (callOverlay) callOverlay.style.display = 'none';
-    alert("Emergency call ended. Dispatch logs successfully archived on server.");
+    alert("Emergency call ended. Telemetry & dispatch logs archived successfully.");
   };
 
   if (sosBtn) {
     sosBtn.addEventListener('click', () => {
-      // Toggle manual SOS
       if (activeSirenOsc1 || activeSirenOsc2) {
         stopSirenSound();
         alert("Emergency Alarm siren stopped.");
@@ -1696,9 +2332,15 @@ function initEmergencySOSLogic() {
     });
   }
 
+  if (fireSensorBtn) {
+    fireSensorBtn.addEventListener('click', () => {
+      startSOSCountdown('Home Electrical Fire Sensor');
+    });
+  }
+
   if (crashBtn) {
     crashBtn.addEventListener('click', () => {
-      startSOSCountdown('Automatic Accident Deceleration Sensor');
+      startSOSCountdown('Vehicle Crash Sensor');
     });
   }
 
@@ -1712,16 +2354,16 @@ function initEmergencySOSLogic() {
 async function renderSOSLogs() {
   const container = document.getElementById('sos-ticker');
   if (!container) return;
-  
+
   state.sosAlerts = await fetchSOSAlerts();
   container.innerHTML = '';
-  
+
   state.sosAlerts.forEach(sos => {
     const item = document.createElement('div');
     item.className = 'ticker-item';
-    
+
     const formattedTime = new Date(sos.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    
+
     item.innerHTML = `
       <div class="ticker-header">
         <span><i class="fa-solid fa-triangle-exclamation text-danger"></i> Alert Event: ${sos.triggerType}</span>
@@ -1738,23 +2380,23 @@ async function renderSOSLogs() {
 async function renderAcademyCourses() {
   const container = document.getElementById('academy-courses-list');
   if (!container) return;
-  
+
   state.courses = await fetchCourses();
   container.innerHTML = '';
-  
+
   state.courses.forEach(course => {
     const card = document.createElement('div');
     card.className = 'glass-card course-card';
-    
+
     let lessonItemsHTML = '';
     course.lessons.forEach(l => {
       lessonItemsHTML += `<li><i class="fa-regular fa-circle-play"></i> ${l.title} (${l.time})</li>`;
     });
-    
+
     // Check if skill badge is already earned
     const isCompleted = state.currentUser.skills.includes(course.id === 'ev_basics' ? 'Certified EV Diagnostics' : 'Smart IoT Technician');
-    
-    const actionBtnHTML = isCompleted 
+
+    const actionBtnHTML = isCompleted
       ? `<button class="btn btn-secondary btn-block" disabled><i class="fa-solid fa-award text-success"></i> Course Certified</button>`
       : `<button class="btn btn-primary btn-block" onclick="startCourseQuiz('${course.id}')"><i class="fa-solid fa-pencil"></i> Start Upskill Quiz</button>`;
 
@@ -1779,22 +2421,22 @@ async function renderAcademyCourses() {
 function startCourseQuiz(courseId) {
   state.activeQuizCourseId = courseId;
   state.selectedQuizAnswers = [];
-  
+
   const drawer = document.getElementById('quiz-drawer');
   const titleEl = document.getElementById('quiz-course-title');
   const questionsContainer = document.getElementById('quiz-questions-container');
-  
+
   const course = state.courses.find(c => c.id === courseId);
   if (!course || !drawer || !questionsContainer) return;
-  
+
   if (titleEl) titleEl.textContent = `Quiz: ${course.title}`;
-  
+
   // Render quiz questions
   questionsContainer.innerHTML = '';
   course.quiz.questions.forEach((q, qIdx) => {
     const qBlock = document.createElement('div');
     qBlock.style.marginBottom = '12px';
-    
+
     let optionsHTML = '';
     q.options.forEach((opt, oIdx) => {
       optionsHTML += `
@@ -1803,14 +2445,14 @@ function startCourseQuiz(courseId) {
         </div>
       `;
     });
-    
+
     qBlock.innerHTML = `
       <h4 class="quiz-question-title">Q${qIdx + 1}: ${q.q}</h4>
       <div class="quiz-options-list">${optionsHTML}</div>
     `;
     questionsContainer.appendChild(qBlock);
   });
-  
+
   drawer.classList.add('active');
 }
 
@@ -1821,7 +2463,7 @@ function selectQuizOption(qIdx, oIdx, element) {
     opt.classList.remove('selected');
   });
   element.classList.add('selected');
-  
+
   state.selectedQuizAnswers[qIdx] = oIdx;
 }
 
@@ -1840,7 +2482,7 @@ function initQuizLogic() {
     submitBtn.addEventListener('click', async () => {
       const course = state.courses.find(c => c.id === state.activeQuizCourseId);
       if (!course) return;
-      
+
       // Ensure all questions are answered
       if (state.selectedQuizAnswers.length < course.quiz.questions.length || state.selectedQuizAnswers.includes(undefined)) {
         alert("Please answer all questions before submitting.");
@@ -1850,13 +2492,13 @@ function initQuizLogic() {
       try {
         const result = await submitQuiz(state.activeQuizCourseId, state.selectedQuizAnswers);
         if (drawer) drawer.classList.remove('active');
-        
+
         if (result.passed) {
           alert(`Congratulations! You passed the quiz (${result.correctCount}/${result.total}) and earned the badge: "${result.skillBadge}". This has been added to your profile.`);
         } else {
           alert(`Quiz Failed (${result.correctCount}/${result.total}). Please review course content and try again.`);
         }
-        
+
         await syncAppState();
         renderAcademyCourses();
         updateProfileUI();
@@ -1871,9 +2513,9 @@ function initQuizLogic() {
 async function renderChatWorkspace() {
   const threadContainer = document.getElementById('chat-threads-list');
   const chatPaneActive = document.getElementById('chat-pane-active');
-  
+
   if (!threadContainer || !chatPaneActive) return;
-  
+
   if (state.activeChatId) {
     threadContainer.style.display = 'none';
     chatPaneActive.style.display = 'flex';
@@ -1881,13 +2523,13 @@ async function renderChatWorkspace() {
   } else {
     threadContainer.style.display = 'flex';
     chatPaneActive.style.display = 'none';
-    
+
     // Fetch unique people who have active messages in DB
     const db = getLocalDB();
     const chatPartnersIds = [...new Set(db.messages.map(m => m.senderId === 'user' ? m.receiverId : m.senderId))].filter(id => id !== 'user');
-    
+
     threadContainer.innerHTML = '';
-    
+
     if (chatPartnersIds.length === 0) {
       threadContainer.innerHTML = `
         <div class="text-muted" style="text-align:center; padding: 40px;">
@@ -1897,26 +2539,26 @@ async function renderChatWorkspace() {
       `;
       return;
     }
-    
+
     chatPartnersIds.forEach(id => {
       // Find worker metadata details
       const partner = state.workers.find(w => w.id === id);
       if (!partner) return;
-      
-      const threadMessages = db.messages.filter(m => 
-        (m.senderId === 'user' && m.receiverId === id) || 
+
+      const threadMessages = db.messages.filter(m =>
+        (m.senderId === 'user' && m.receiverId === id) ||
         (m.senderId === id && m.receiverId === 'user')
       );
       const lastMsg = threadMessages[threadMessages.length - 1];
       const previewText = lastMsg ? lastMsg.content : "No messages yet";
-      
+
       const card = document.createElement('div');
       card.className = 'glass-card chat-thread-card';
       card.addEventListener('click', () => {
         state.activeChatId = partner.id;
         renderChatWorkspace();
       });
-      
+
       card.innerHTML = `
         <div class="worker-avatar">${partner.avatar}</div>
         <div style="flex:1;">
@@ -1933,9 +2575,9 @@ async function renderChatConversation() {
   const partner = state.workers.find(w => w.id === state.activeChatId);
   const infoEl = document.getElementById('chat-header-info');
   const container = document.getElementById('chat-messages-container');
-  
+
   if (!partner || !infoEl || !container) return;
-  
+
   // Render header info
   infoEl.innerHTML = `
     <div class="worker-avatar" style="width:30px; height:30px; font-size:11px;">${partner.avatar}</div>
@@ -1944,10 +2586,10 @@ async function renderChatConversation() {
       <span>● Online Support</span>
     </div>
   `;
-  
+
   const list = await fetchMessages(partner.id);
   container.innerHTML = '';
-  
+
   list.forEach(m => {
     const isOutgoing = m.senderId === 'user';
     const bubble = document.createElement('div');
@@ -1955,7 +2597,7 @@ async function renderChatConversation() {
     bubble.textContent = m.content;
     container.appendChild(bubble);
   });
-  
+
   // Auto scroll messages to the bottom
   container.scrollTop = container.scrollHeight;
 }
@@ -1974,10 +2616,10 @@ function initChatSubmitForm() {
       try {
         await sendMessage(state.activeChatId, content);
         inputText.value = '';
-        
+
         // Refresh convo
         renderChatConversation();
-        
+
         // Sync API state updates
         setTimeout(async () => {
           await syncAppState();
@@ -2006,8 +2648,8 @@ function openChatFromWorker(workerId) {
 
 // --- VIEW 7: MY PROFILE & WORKER ACCOUNT REGISTRATION ---
 function updateProfileUI() {
-  const user = state.currentUser;
-  
+  const user = state.currentUser || {};
+
   // Update generic values
   const nameEl = document.getElementById('profile-display-name');
   const roleEl = document.getElementById('profile-display-role');
@@ -2016,45 +2658,49 @@ function updateProfileUI() {
   const statBadges = document.getElementById('profile-stat-badges');
   const skillBadgesList = document.getElementById('profile-skill-badges');
 
-  if (nameEl) nameEl.textContent = user.name;
-  if (roleEl) roleEl.textContent = `Account Type: ${user.role}`;
-  if (avatarEl) avatarEl.textContent = user.avatar;
-  if (statBookings) statBookings.textContent = state.bookings.length;
-  if (statBadges) statBadges.textContent = user.skills.length;
-  
+  if (nameEl) nameEl.textContent = user.name || "Not Logged In";
+  if (roleEl) roleEl.textContent = user.role ? `Account Type: ${user.role}` : "Account Type: Guest";
+  if (avatarEl) avatarEl.textContent = user.avatar || "--";
+  if (statBookings) statBookings.textContent = state.bookings ? state.bookings.length : 0;
+  if (statBadges) statBadges.textContent = user.skills ? user.skills.length : 0;
+
   // Badges lists
   if (skillBadgesList) {
     skillBadgesList.innerHTML = '';
-    user.skills.forEach(badge => {
-      const span = document.createElement('span');
-      span.className = 'badge badge-approved';
-      span.innerHTML = `<i class="fa-solid fa-certificate"></i> ${badge}`;
-      skillBadgesList.appendChild(span);
-    });
+    if (user.skills && user.skills.length > 0) {
+      user.skills.forEach(badge => {
+        const span = document.createElement('span');
+        span.className = 'badge badge-approved';
+        span.innerHTML = `<i class="fa-solid fa-certificate"></i> ${badge}`;
+        skillBadgesList.appendChild(span);
+      });
+    } else {
+      skillBadgesList.innerHTML = `<span class="text-muted" style="font-size:10px;">No verified badges earned yet</span>`;
+    }
   }
 }
 
 function populateProfileDashboard() {
   updateProfileUI();
-  
-  const user = state.currentUser;
+
+  const user = state.currentUser || {};
   const applicationCard = document.getElementById('worker-application-card');
   const activeDashboard = document.getElementById('worker-active-dashboard');
-  
+
   if (user.role === 'Worker') {
     if (applicationCard) applicationCard.style.display = 'none';
     if (activeDashboard) activeDashboard.style.display = 'block';
-    
+
     // Render worker dashboard values
-    document.getElementById('wd-category').textContent = user.category.charAt(0).toUpperCase() + user.category.slice(1);
-    document.getElementById('wd-education').textContent = user.education;
-    document.getElementById('wd-experience').textContent = user.experience;
-    document.getElementById('wd-license').textContent = user.licenseNumber;
-    document.getElementById('wd-rate').textContent = `₹${user.hourlyRate}/hr`;
-    
+    if (document.getElementById('wd-category')) document.getElementById('wd-category').textContent = (user.category || 'electrician').charAt(0).toUpperCase() + (user.category || 'electrician').slice(1);
+    if (document.getElementById('wd-education')) document.getElementById('wd-education').textContent = user.education || 'Cert';
+    if (document.getElementById('wd-experience')) document.getElementById('wd-experience').textContent = user.experience || '1 Year';
+    if (document.getElementById('wd-license')) document.getElementById('wd-license').textContent = user.licenseNumber || 'GOV-891';
+    if (document.getElementById('wd-rate')) document.getElementById('wd-rate').textContent = `₹${user.hourlyRate || 150}/hr`;
+
     const badge = document.getElementById('wd-badge');
     const adminBox = document.getElementById('wd-admin-simulate-box');
-    
+
     if (user.isWorkerApproved) {
       if (badge) {
         badge.className = 'badge badge-approved';
@@ -2068,6 +2714,45 @@ function populateProfileDashboard() {
       }
       if (adminBox) adminBox.style.display = 'block';
     }
+
+    // Availability Badge & Controls
+    const availBadge = document.getElementById('wd-availability-badge');
+    const availSelect = document.getElementById('wd-availability-select');
+    const availBtn = document.getElementById('btn-update-availability');
+
+    if (availBadge) {
+      if (user.isAvailable !== false) {
+        availBadge.className = 'badge badge-available';
+        availBadge.innerHTML = `🟢 ${user.availabilityStatus || 'Available Now'}`;
+      } else {
+        availBadge.className = 'badge badge-unavailable';
+        availBadge.innerHTML = `🔴 ${user.availabilityStatus || 'Unavailable'}`;
+      }
+    }
+
+    if (availSelect) {
+      const valStr = `${user.isAvailable !== false ? 'true' : 'false'}|${user.availabilityStatus || 'Available Now'}`;
+      availSelect.value = valStr;
+    }
+
+    if (availBtn && !availBtn.dataset.bound) {
+      availBtn.dataset.bound = "true";
+      availBtn.addEventListener('click', async () => {
+        const val = document.getElementById('wd-availability-select').value;
+        const [isAvailStr, statusText] = val.split('|');
+        const isAvail = isAvailStr === 'true';
+
+        try {
+          await toggleWorkerAvailability(isAvail, statusText);
+          playSuccessSound();
+          alert(`Availability status updated to: ${statusText}`);
+          await syncAppState();
+          populateProfileDashboard();
+        } catch (e) {
+          console.error("Failed to update availability:", e);
+        }
+      });
+    }
   } else {
     if (applicationCard) applicationCard.style.display = 'block';
     if (activeDashboard) activeDashboard.style.display = 'none';
@@ -2077,11 +2762,11 @@ function populateProfileDashboard() {
 function initWorkerRegistrationForm() {
   const form = document.getElementById('form-worker-register');
   const adminApproveBtn = document.getElementById('btn-admin-approve-me');
-  
+
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const category = document.getElementById('reg-category').value;
       const education = document.getElementById('reg-education').value;
       const experience = document.getElementById('reg-experience').value;
@@ -2103,11 +2788,10 @@ function initWorkerRegistrationForm() {
 
   if (adminApproveBtn) {
     adminApproveBtn.addEventListener('click', async () => {
-      // Find the user's worker profile ID from local or remote workers list
       const userLicense = state.currentUser.licenseNumber;
       const match = state.workers.find(w => w.licenseNumber === userLicense);
       const targetId = match ? match.id : null;
-      
+
       if (targetId) {
         try {
           await simulateApproveWorker(targetId);
@@ -2133,13 +2817,15 @@ function initLoginForms() {
     formUser.addEventListener('submit', async (e) => {
       e.preventDefault();
       playClickSound();
-      
+
+      const email = document.getElementById('login-user-email') ? document.getElementById('login-user-email').value : "";
+      const password = document.getElementById('login-user-password') ? document.getElementById('login-user-password').value : "";
       const name = document.getElementById('login-user-name').value;
       const phone = document.getElementById('login-user-phone').value;
       const location = document.getElementById('login-user-location').value;
 
       try {
-        const user = await loginUser({ role: 'Customer', name, phone, location });
+        const user = await loginUser({ role: 'Customer', email, password, name, phone, location });
         playSuccessSound();
         await syncAppState();
         navigateToView('workers');
@@ -2153,7 +2839,9 @@ function initLoginForms() {
     formWorker.addEventListener('submit', async (e) => {
       e.preventDefault();
       playClickSound();
-      
+
+      const email = document.getElementById('login-worker-email') ? document.getElementById('login-worker-email').value : "";
+      const password = document.getElementById('login-worker-password') ? document.getElementById('login-worker-password').value : "";
       const name = document.getElementById('login-worker-name').value;
       const phone = document.getElementById('login-worker-phone').value;
       const category = document.getElementById('login-worker-category').value;
@@ -2161,11 +2849,16 @@ function initLoginForms() {
       const experience = document.getElementById('login-worker-experience').value;
       const licenseNumber = document.getElementById('login-worker-license').value;
       const hourlyRate = document.getElementById('login-worker-rate').value;
+      const availVal = document.getElementById('login-worker-availability') ? document.getElementById('login-worker-availability').value : "true|Available Now";
+      const [isAvailStr, statusText] = availVal.split('|');
+      const isAvailable = isAvailStr === 'true';
       const isElitePro = document.getElementById('login-worker-pro').checked;
 
       try {
         const user = await loginUser({
           role: 'Worker',
+          email,
+          password,
           name,
           phone,
           category,
@@ -2173,6 +2866,8 @@ function initLoginForms() {
           experience,
           licenseNumber,
           hourlyRate,
+          isAvailable,
+          availabilityStatus: statusText,
           isElitePro
         });
         playSuccessSound();
@@ -2205,6 +2900,7 @@ function initLoginForms() {
 // --- INITIALIZER BOOTSTRAP ---
 window.addEventListener('DOMContentLoaded', async () => {
   initAppChrome();
+  initLanguageSelector();
   initViewRouter();
   initWorkersFilterLogic();
   initShowroomTabs();
@@ -2227,7 +2923,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   // Test Server & Sync state
   await checkServerConnection();
   await syncAppState();
-  
+
   if (!state.isLoggedIn) {
     navigateToView('login');
   } else {
@@ -2237,7 +2933,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       navigateToView('workers');
     }
   }
-  
+
   // Set up background synchronization every 10 seconds to catch simulated worker replies
   setInterval(async () => {
     const prevView = state.activeView;
@@ -2247,7 +2943,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       renderChatConversation();
     }
   }, 10000);
-  
+
   // Initial lists renders
   renderWorkersList();
 });
+
