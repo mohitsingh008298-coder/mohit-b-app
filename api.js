@@ -20,27 +20,33 @@ router.post('/me', (req, res) => {
   db.currentUser = {
     ...db.currentUser,
     ...updatedProfile,
-    avatar: updatedProfile.name ? updatedProfile.name.split(' ').map(n => n[0]).join('').toUpperCase() : "AJ"
+    avatar: updatedProfile.name ? updatedProfile.name.split(' ').map(n => n[0]).join('').toUpperCase() : (db.currentUser.avatar || "AJ")
   };
   
-  if (db.currentUser.role === "Worker" && !db.currentUser.isWorkerApproved) {
-    console.log(`Worker registration application received for: ${db.currentUser.name}`);
+  if (db.currentUser.role === "Worker") {
+    // Sync worker status in workers array
+    const worker = db.workers.find(w => w.id === db.currentUser.id || w.licenseNumber === db.currentUser.licenseNumber);
+    if (worker) {
+      if (updatedProfile.isAvailable !== undefined) worker.isAvailable = updatedProfile.isAvailable;
+      if (updatedProfile.availabilityStatus !== undefined) worker.availabilityStatus = updatedProfile.availabilityStatus;
+    }
   }
   
   saveDB(db);
   res.json(db.currentUser);
 });
 
-// 2b. Login endpoint for Customer or Worker
+// 2b. Login endpoint for Customer or Worker with Gmail & Password
 router.post('/login', (req, res) => {
   const db = loadDB();
-  const { role, name, phone, category, education, experience, licenseNumber, hourlyRate, isElitePro } = req.body;
+  const { role, name, phone, email, password, category, education, experience, licenseNumber, hourlyRate, isElitePro, isAvailable, availabilityStatus } = req.body;
 
   if (!name || !phone) {
     return res.status(400).json({ error: "Name and Phone are required" });
   }
 
   const avatar = name.split(' ').map(n => n[0]).join('').toUpperCase();
+  const gmail = email || (name.toLowerCase().replace(/\s+/g, '.') + '@gmail.com');
 
   if (role === 'Worker') {
     let worker = db.workers.find(w => w.name.toLowerCase() === name.toLowerCase() || (licenseNumber && w.licenseNumber === licenseNumber));
@@ -48,6 +54,7 @@ router.post('/login', (req, res) => {
       worker = {
         id: "worker_" + Date.now(),
         name,
+        email: gmail,
         category: category || "electrician",
         role: isElitePro ? "Elite Pro Consultant" : ((category || "electrician").charAt(0).toUpperCase() + (category || "electrician").slice(1) + " Expert"),
         experience: experience || "1 Year",
@@ -61,21 +68,25 @@ router.post('/login', (req, res) => {
         approved: true,
         guaranteed: true,
         licenseNumber: licenseNumber || "GOV-LIC-" + Math.floor(Math.random() * 900 + 100),
-        isElitePro: !!isElitePro
+        isElitePro: !!isElitePro,
+        isAvailable: isAvailable !== undefined ? !!isAvailable : true,
+        availabilityStatus: availabilityStatus || "Available Now"
       };
       db.workers.push(worker);
     } else {
       if (isElitePro !== undefined) {
         worker.isElitePro = !!isElitePro;
-        if (isElitePro) {
-          worker.role = "Elite Pro Consultant";
-        }
+        if (isElitePro) worker.role = "Elite Pro Consultant";
       }
+      if (isAvailable !== undefined) worker.isAvailable = !!isAvailable;
+      if (availabilityStatus !== undefined) worker.availabilityStatus = availabilityStatus;
+      if (email) worker.email = email;
     }
     
     db.currentUser = {
       id: worker.id,
       name: worker.name,
+      email: worker.email || gmail,
       role: "Worker",
       avatar: worker.avatar,
       phone: worker.phone,
@@ -88,6 +99,8 @@ router.post('/login', (req, res) => {
       licenseNumber: worker.licenseNumber,
       hourlyRate: worker.hourlyRate,
       isElitePro: worker.isElitePro,
+      isAvailable: worker.isAvailable !== undefined ? worker.isAvailable : true,
+      availabilityStatus: worker.availabilityStatus || "Available Now",
       appliedGigs: db.currentUser.appliedGigs || []
     };
   } else {
@@ -95,6 +108,7 @@ router.post('/login', (req, res) => {
     db.currentUser = {
       id: "user_" + Date.now(),
       name,
+      email: gmail,
       role: "Customer",
       avatar,
       phone,
@@ -107,6 +121,8 @@ router.post('/login', (req, res) => {
       licenseNumber: "",
       hourlyRate: "",
       isElitePro: false,
+      isAvailable: true,
+      availabilityStatus: "Customer Account",
       appliedGigs: []
     };
   }
@@ -115,12 +131,43 @@ router.post('/login', (req, res) => {
   res.json(db.currentUser);
 });
 
-// 2c. Logout endpoint
+// 2c. Worker availability toggle endpoint
+router.post('/workers/:id/availability', (req, res) => {
+  const db = loadDB();
+  const workerId = req.params.id;
+  const { isAvailable, availabilityStatus } = req.body;
+
+  const worker = db.workers.find(w => w.id === workerId || w.licenseNumber === db.currentUser.licenseNumber);
+  if (worker) {
+    if (isAvailable !== undefined) worker.isAvailable = !!isAvailable;
+    if (availabilityStatus !== undefined) worker.availabilityStatus = availabilityStatus;
+    
+    if (db.currentUser.id === worker.id || db.currentUser.licenseNumber === worker.licenseNumber) {
+      db.currentUser.isAvailable = worker.isAvailable;
+      db.currentUser.availabilityStatus = worker.availabilityStatus;
+    }
+    saveDB(db);
+    return res.json({ success: true, worker, currentUser: db.currentUser });
+  }
+
+  // Fallback update current user if worker id matched current user
+  if (db.currentUser && (db.currentUser.id === workerId || db.currentUser.role === 'Worker')) {
+    if (isAvailable !== undefined) db.currentUser.isAvailable = !!isAvailable;
+    if (availabilityStatus !== undefined) db.currentUser.availabilityStatus = availabilityStatus;
+    saveDB(db);
+    return res.json({ success: true, currentUser: db.currentUser });
+  }
+
+  res.status(404).json({ error: "Worker profile not found" });
+});
+
+// 2d. Logout endpoint
 router.post('/logout', (req, res) => {
   const db = loadDB();
   db.currentUser = {
     id: "",
     name: "",
+    email: "",
     role: "",
     avatar: "",
     phone: "",
@@ -133,6 +180,8 @@ router.post('/logout', (req, res) => {
     licenseNumber: "",
     hourlyRate: "",
     isElitePro: false,
+    isAvailable: false,
+    availabilityStatus: "Offline",
     appliedGigs: []
   };
   saveDB(db);
