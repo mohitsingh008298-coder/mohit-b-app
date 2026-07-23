@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
@@ -53,9 +52,29 @@
                     </div>
                     <span class="brand-name">FixElite</span>
                 </div>
-                <button class="header-sos-btn" id="header-sos-trigger" style="display: none;">
-                    <i class="fa-solid fa-bell"></i> SOS
-                </button>
+                <div class="header-right-controls" style="display: flex; align-items: center; gap: 8px;">
+                    <div class="lang-selector-box" title="Change Language / भाषा चुनें">
+                        <i class="fa-solid fa-globe" style="color: var(--color-primary); font-size: 13px;"></i>
+                        <select id="app-language-select" class="lang-dropdown">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी (Hindi)</option>
+                            <option value="bn">বাংলা (Bengali)</option>
+                            <option value="te">తెలుగు (Telugu)</option>
+                            <option value="mr">मराठी (Marathi)</option>
+                            <option value="ta">தமிழ் (Tamil)</option>
+                            <option value="ur">اردو (Urdu)</option>
+                            <option value="gu">ગુજરાતી (Gujarati)</option>
+                            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                            <option value="or">ଓଡ଼ିଆ (Odia)</option>
+                            <option value="ml">മലയാളം (Malayalam)</option>
+                            <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                            <option value="as">অসমীয়া (Assamese)</option>
+                        </select>
+                    </div>
+                    <button class="header-sos-btn" id="header-sos-trigger" style="display: none;">
+                        <i class="fa-solid fa-bell"></i> SOS
+                    </button>
+                </div>
             </header>
 
             <!-- Main Scrollable App Viewport -->
@@ -64,39 +83,57 @@
                 <!-- VIEW 0: LOGIN & PORTAL SELECTION -->
                 <section id="view-login" class="content-view active">
                     <div class="view-title-block" style="text-align: center;">
-                        <div class="login-brand" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
-                            <i class="fa-solid fa-screwdriver-wrench" style="font-size: 24px; color: var(--color-primary);"></i>
+                        <div class="login-brand" style="margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-screwdriver-wrench" style="font-size: 26px; color: var(--color-primary);"></i>
                             <h2 style="font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">FixElite</h2>
                         </div>
-                        <p style="font-size:11.5px;">Welcome! Select your access portal below to proceed.</p>
+                        <p data-i18n="login_welcome" style="font-size:11.5px; color: var(--text-muted);">Start by logging in with Gmail & Password, then choose your account role.</p>
                     </div>
 
-                    <div class="login-tabs" style="display: flex; gap: 8px; margin-bottom: 16px;">
-                        <button type="button" class="login-tab-btn active" id="login-tab-user" style="flex: 1; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition-smooth);">
-                            <i class="fa-solid fa-user"></i> Customer Portal
-                        </button>
-                        <button type="button" class="login-tab-btn" id="login-tab-worker" style="flex: 1; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition-smooth);">
-                            <i class="fa-solid fa-briefcase"></i> Worker Portal
-                        </button>
+                    <!-- Role Selection Cards -->
+                    <div class="role-selector-group" style="margin-bottom: 16px;">
+                        <label style="font-size: 11px; font-weight:700; color: var(--text-main); margin-bottom: 6px; display: block;" data-i18n="select_account_role">SELECT YOUR ACCOUNT ROLE:</label>
+                        <div class="login-tabs" style="display: flex; gap: 8px;">
+                            <button type="button" class="login-tab-btn active" id="login-tab-user" style="flex: 1; padding: 12px 8px; border-radius: var(--radius-md); border: 1.5px solid var(--color-primary); background: rgba(6,182,212,0.08); color: var(--text-main); font-weight: 700; cursor: pointer; font-size: 11.5px; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: var(--transition-smooth);">
+                                <i class="fa-solid fa-user-circle" style="font-size: 18px; color: var(--color-primary);"></i>
+                                <span data-i18n="role_customer">Customer (User)</span>
+                            </button>
+                            <button type="button" class="login-tab-btn" id="login-tab-worker" style="flex: 1; padding: 12px 8px; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: rgba(255,255,255,0.03); color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 11.5px; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: var(--transition-smooth);">
+                                <i class="fa-solid fa-briefcase" style="font-size: 18px; color: var(--color-secondary);"></i>
+                                <span data-i18n="role_worker">Service Worker</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Customer Form -->
                     <div class="login-card-container" id="login-form-user">
                         <form id="form-login-user">
+                            <div class="gmail-auth-badge" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(234,67,53,0.08); border: 1px solid rgba(234,67,53,0.25); border-radius: var(--radius-md); margin-bottom: 12px;">
+                                <i class="fa-brands fa-google" style="color: #ea4335; font-size: 16px;"></i>
+                                <span style="font-size: 11px; font-weight: 600; color: var(--text-main);" data-i18n="gmail_login_title">Gmail & Password Authentication</span>
+                            </div>
                             <div class="form-group">
-                                <label for="login-user-name">Your Full Name</label>
+                                <label for="login-user-email" data-i18n="label_gmail">Gmail Address</label>
+                                <input type="email" id="login-user-email" placeholder="e.g. alex.johnson@gmail.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-user-password" data-i18n="label_password">Password</label>
+                                <input type="password" id="login-user-password" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-user-name" data-i18n="label_full_name">Your Full Name</label>
                                 <input type="text" id="login-user-name" placeholder="e.g. Alex Johnson" required>
                             </div>
                             <div class="form-group">
-                                <label for="login-user-phone">Phone Number</label>
+                                <label for="login-user-phone" data-i18n="label_phone">Phone Number</label>
                                 <input type="tel" id="login-user-phone" placeholder="e.g. +91 98765 43210" required>
                             </div>
                             <div class="form-group">
-                                <label for="login-user-location">Your Location</label>
+                                <label for="login-user-location" data-i18n="label_location">Your Location</label>
                                 <input type="text" id="login-user-location" placeholder="e.g. Metro City Central" value="Metro City Central" required>
                             </div>
                             <button type="submit" class="btn btn-cyan btn-block" style="margin-top: 10px;">
-                                <i class="fa-solid fa-right-to-bracket"></i> Access Customer Lounge
+                                <i class="fa-brands fa-google"></i> <span data-i18n="btn_login_customer">Login with Gmail as Customer</span>
                             </button>
                         </form>
                     </div>
@@ -104,29 +141,41 @@
                     <!-- Worker Form -->
                     <div class="login-card-container" id="login-form-worker" style="display: none;">
                         <form id="form-login-worker">
+                            <div class="gmail-auth-badge" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: rgba(234,67,53,0.08); border: 1px solid rgba(234,67,53,0.25); border-radius: var(--radius-md); margin-bottom: 12px;">
+                                <i class="fa-brands fa-google" style="color: #ea4335; font-size: 16px;"></i>
+                                <span style="font-size: 11px; font-weight: 600; color: var(--text-main);" data-i18n="gmail_worker_auth">Worker Gmail Credentials & Service Data</span>
+                            </div>
                             <div class="form-group">
-                                <label for="login-worker-name">Professional Name</label>
+                                <label for="login-worker-email" data-i18n="label_gmail">Gmail Address</label>
+                                <input type="email" id="login-worker-email" placeholder="e.g. ramesh.kumar@gmail.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-password" data-i18n="label_password">Password</label>
+                                <input type="password" id="login-worker-password" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-name" data-i18n="label_worker_name">Professional Name</label>
                                 <input type="text" id="login-worker-name" placeholder="e.g. Ramesh Kumar" required>
                             </div>
                             <div class="form-group">
-                                <label for="login-worker-phone">Phone Number</label>
+                                <label for="login-worker-phone" data-i18n="label_phone">Phone Number</label>
                                 <input type="tel" id="login-worker-phone" placeholder="e.g. +91 98111 22233" required>
                             </div>
                             <div class="form-group">
-                                <label for="login-worker-category">Trade Specialization</label>
+                                <label for="login-worker-category" data-i18n="label_trade">Trade Specialization</label>
                                 <select id="login-worker-category" required>
-                                    <option value="electrician">Electrician Services</option>
-                                    <option value="plumber">Plumbing Services</option>
-                                    <option value="bike_mechanic">Bike & Two-Wheeler Mechanic</option>
-                                    <option value="car_mechanic">Car & Four-Wheeler Mechanic</option>
+                                    <option value="electrician" data-i18n="cat_electrician">Electrician Services</option>
+                                    <option value="plumber" data-i18n="cat_plumber">Plumbing Services</option>
+                                    <option value="bike_mechanic" data-i18n="cat_bike">Bike & Two-Wheeler Mechanic</option>
+                                    <option value="car_mechanic" data-i18n="cat_car">Car & Four-Wheeler Mechanic</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="login-worker-education">Education / Certification</label>
+                                <label for="login-worker-education" data-i18n="label_education">Education / Certification</label>
                                 <input type="text" id="login-worker-education" placeholder="e.g. Govt ITI Certificate" required>
                             </div>
                             <div class="form-group">
-                                <label for="login-worker-experience">Years of Experience</label>
+                                <label for="login-worker-experience" data-i18n="label_experience">Years of Experience</label>
                                 <select id="login-worker-experience" required>
                                     <option value="1 Year">1 Year Experience</option>
                                     <option value="2 Years">2 Years Experience</option>
@@ -137,19 +186,27 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="login-worker-license">Govt License / ID Number</label>
+                                <label for="login-worker-license" data-i18n="label_license">Govt License / ID Number</label>
                                 <input type="text" id="login-worker-license" placeholder="e.g. GOV-EL-908" required>
                             </div>
                             <div class="form-group">
-                                <label for="login-worker-rate">Requested Hourly Rate (₹)</label>
+                                <label for="login-worker-rate" data-i18n="label_rate">Requested Hourly Rate (₹)</label>
                                 <input type="number" id="login-worker-rate" placeholder="e.g. 200" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="login-worker-availability" data-i18n="label_initial_availability">Initial Availability Status</label>
+                                <select id="login-worker-availability">
+                                    <option value="true|Available Now">🟢 Available Now</option>
+                                    <option value="false|Busy On Call">🟡 Busy On Call</option>
+                                    <option value="false|Offline">🔴 Offline / Unavailable</option>
+                                </select>
                             </div>
                             <div class="form-group" style="display:flex; align-items:center; gap:8px; margin: 10px 0;">
                                 <input type="checkbox" id="login-worker-pro" style="width: auto; cursor:pointer;">
-                                <label for="login-worker-pro" style="margin-bottom:0; cursor:pointer; font-size:11px; font-weight:700; color:var(--color-primary);"><i class="fa-solid fa-crown"></i> Register for Premium Pro Tier (Graduates/Engineers)</label>
+                                <label for="login-worker-pro" style="margin-bottom:0; cursor:pointer; font-size:11px; font-weight:700; color:var(--color-primary);" data-i18n="label_pro_tier"><i class="fa-solid fa-crown"></i> Register for Premium Pro Tier (Graduates/Engineers)</label>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">
-                                <i class="fa-solid fa-right-to-bracket"></i> Access Worker Portal
+                                <i class="fa-brands fa-google"></i> <span data-i18n="btn_login_worker">Login with Gmail as Worker</span>
                             </button>
                         </form>
                     </div>
@@ -200,7 +257,14 @@
                     <!-- Filter Options Box -->
                     <div class="filter-drawer" id="filter-drawer">
                         <div class="filter-group">
-                            <label for="filter-experience">Experience</label>
+                            <label for="filter-availability" data-i18n="filter_availability">Availability</label>
+                            <select id="filter-availability">
+                                <option value="all">All Workers</option>
+                                <option value="available">🟢 Available Now Only</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-experience" data-i18n="filter_experience">Experience</label>
                             <select id="filter-experience">
                                 <option value="all">Any Experience</option>
                                 <option value="5">5+ Years Exp</option>
@@ -208,21 +272,21 @@
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label for="filter-approval">Verification</label>
+                            <label for="filter-approval" data-i18n="filter_approval">Verification</label>
                             <select id="filter-approval">
                                 <option value="all">All Workers</option>
                                 <option value="approved">Govt Approved</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label for="filter-guarantee">Guarantee</label>
+                            <label for="filter-guarantee" data-i18n="filter_guarantee">Guarantee</label>
                             <select id="filter-guarantee">
                                 <option value="all">Any Status</option>
                                 <option value="guaranteed">Guaranteed Only</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label for="filter-price">Max Hourly Rate</label>
+                            <label for="filter-price" data-i18n="filter_price">Max Hourly Rate</label>
                             <select id="filter-price">
                                 <option value="999">Any Budget</option>
                                 <option value="150">Max ₹150/hr</option>
@@ -231,7 +295,7 @@
                             </select>
                         </div>
                         <div class="filter-group">
-                            <label for="filter-pro">Consultant Tier</label>
+                            <label for="filter-pro" data-i18n="filter_pro">Consultant Tier</label>
                             <select id="filter-pro">
                                 <option value="all">All Tiers</option>
                                 <option value="pro">👑 Elite Pro Only</option>
@@ -334,40 +398,64 @@
                     </div>
                 </section>
 
-                <!-- VIEW 4: EMERGENCY SOS & ACCIDENT SENSOR -->
+                <!-- VIEW 4: EMERGENCY SOS & AUTOMATIC SENSORS -->
                 <section id="view-sos" class="content-view">
                     <div class="view-title-block">
-                        <h2>Emergency SOS Assistant</h2>
-                        <p>Instant safety dispatch network. Broadcasters alert nearest workers, medical stations, and towing trucks.</p>
+                        <h2>Emergency SOS & Auto Sensors</h2>
+                        <p>Automatic safety hazard detection & immediate emergency dispatch network.</p>
                     </div>
 
                     <div class="sos-view-layout">
-                        <!-- Accident Sensor Simulator Toggle -->
-                        <div class="glass-card btn-block" style="text-align: left; padding: 10px 14px; margin-bottom: 12px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <div>
-                                    <h4 style="font-size:12.5px;"><i class="fa-solid fa-triangle-exclamation text-warning"></i> Auto Accident Sensor</h4>
-                                    <p style="font-size:10px; color:var(--text-muted);">Simulate crash deceleration to trigger Auto SOS countdown.</p>
+                        <!-- Automatic Sensor Scenarios Grid -->
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px;">
+                            <!-- Scenario 1: Home Electrical Fire & Short Circuit Sensor -->
+                            <div class="glass-card" style="text-align: left; padding: 12px; border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.04);">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+                                    <div>
+                                        <h4 style="font-size:13px; color: var(--color-danger); display:flex; align-items:center; gap:6px;">
+                                            <i class="fa-solid fa-fire-flame-curved text-danger"></i> Home Electrical Fire Sensor
+                                        </h4>
+                                        <p style="font-size:10.5px; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                                            Detects short-circuit thermal spikes & electrical sparks. Auto-dials <strong>Fire Brigade (101)</strong> & <strong>Ambulance (108)</strong>, and alerts nearby <strong>Electricians</strong>.
+                                        </p>
+                                    </div>
                                 </div>
-                                <button class="btn btn-secondary" style="padding: 6px 12px; font-size:11px;" id="btn-trigger-crash">
-                                    Simulate Accident
+                                <button class="btn btn-secondary btn-block" style="padding: 7px 12px; font-size:11px; border-color: var(--color-danger); color: var(--color-danger);" id="btn-trigger-fire-sensor">
+                                    <i class="fa-solid fa-fire"></i> Simulate Home Fire & Short-Circuit
+                                </button>
+                            </div>
+
+                            <!-- Scenario 2: Car / Bike Collision Crash Sensor -->
+                            <div class="glass-card" style="text-align: left; padding: 12px; border-color: rgba(234,179,8,0.3); background: rgba(234,179,8,0.04);">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 8px;">
+                                    <div>
+                                        <h4 style="font-size:13px; color: #eab308; display:flex; align-items:center; gap:6px;">
+                                            <i class="fa-solid fa-car-burst text-warning"></i> Car / Bike Collision Sensor
+                                        </h4>
+                                        <p style="font-size:10.5px; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                                            Detects G-force collision impact. Auto-dials <strong>Towing Service</strong> & <strong>Ambulance (108)</strong>, and alerts nearby <strong>Car & Bike Mechanics</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary btn-block" style="padding: 7px 12px; font-size:11px; border-color: #eab308; color: #eab308;" id="btn-trigger-crash">
+                                    <i class="fa-solid fa-triangle-exclamation"></i> Simulate Car/Bike Crash Impact
                                 </button>
                             </div>
                         </div>
 
                         <!-- SOS Pulsing Circle Trigger -->
                         <div class="sos-trigger-circle" id="sos-big-button">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            <span>TRIGGER SOS</span>
+                            <i class="fa-solid fa-shield-cat"></i>
+                            <span>MANUAL SOS</span>
                         </div>
 
                         <p class="text-muted" style="font-size: 11px; margin-bottom: 16px;">
-                            Press and hold or tap to send emergency message, current location, and connect local call dispatch.
+                            Tap manual button to launch instant multi-responder sirens, emergency location broadcast, and live call hotline.
                         </p>
 
                         <!-- SOS Active Countdown Display -->
                         <div class="glass-card sos-countdown-panel btn-block" id="sos-countdown-panel">
-                            <h4 class="text-danger" style="animation: flash 1s infinite alternate;">EMERGENCY SOS INITIATING</h4>
+                            <h4 class="text-danger" id="sos-countdown-title" style="animation: flash 1s infinite alternate;">EMERGENCY SOS INITIATING</h4>
                             <div class="sos-timer-number" id="sos-timer-seconds">3</div>
                             <button class="btn btn-secondary" id="btn-cancel-sos" style="padding: 6px 12px;">
                                 Cancel Alert
@@ -454,20 +542,20 @@
                     <!-- Profile Dashboard Summary -->
                     <div class="glass-card">
                         <div style="display: flex; align-items:center; gap:12px; margin-bottom: 12px;">
-                            <div class="worker-avatar" style="width: 50px; height: 50px; font-size:18px;" id="profile-avatar">AJ</div>
+                            <div class="worker-avatar" style="width: 50px; height: 50px; font-size:18px;" id="profile-avatar">--</div>
                             <div>
-                                <h3 id="profile-display-name">Alex Johnson</h3>
-                                <p class="text-muted" style="font-size:11px;" id="profile-display-role">Account Type: Customer</p>
+                                <h3 id="profile-display-name">Not Logged In</h3>
+                                <p class="text-muted" style="font-size:11px;" id="profile-display-role">Account Type: Guest</p>
                             </div>
                         </div>
 
                         <div class="profile-stats-row">
                             <div class="stat-box">
-                                <div class="stat-value" id="profile-stat-bookings">1</div>
+                                <div class="stat-value" id="profile-stat-bookings">0</div>
                                 <div class="stat-label">Bookings</div>
                             </div>
                             <div class="stat-box">
-                                <div class="stat-value" id="profile-stat-badges">1</div>
+                                <div class="stat-value" id="profile-stat-badges">0</div>
                                 <div class="stat-label">Skill Badges</div>
                             </div>
                         </div>
@@ -476,7 +564,7 @@
                         <div style="margin-bottom: 8px;">
                             <span style="font-size: 10px; font-weight:700; color:var(--text-dark); display:block; margin-bottom:4px;">VERIFIED SKILLS:</span>
                             <div style="display:flex; flex-wrap:wrap; gap:4px;" id="profile-skill-badges">
-                                <span class="badge badge-approved"><i class="fa-solid fa-certificate"></i> Basic Wiring</span>
+                                <!-- Loaded dynamically -->
                             </div>
                         </div>
 
@@ -536,17 +624,33 @@
 
                     <!-- Worker Active Dashboard (Hidden until user becomes approved/registered worker) -->
                     <div class="glass-card" id="worker-active-dashboard" style="display: none;">
-                        <h3 class="text-purple"><i class="fa-solid fa-id-card"></i> Worker Registry Details</h3>
-                        <p class="text-muted" style="font-size: 11px; margin-bottom: 12px;">Your details listed in public lookup searches:</p>
+                        <h3 class="text-purple"><i class="fa-solid fa-id-card"></i> <span data-i18n="worker_registry_details">Worker Registry Details</span></h3>
+                        <p class="text-muted" style="font-size: 11px; margin-bottom: 12px;" data-i18n="worker_details_sub">Your details listed in public lookup searches:</p>
                         
                         <div style="display:flex; flex-direction:column; gap:6px; font-size:11.5px; margin-bottom: 12px;">
-                            <div>Category: <strong id="wd-category">Electrician</strong></div>
-                            <div>Education: <strong id="wd-education">ITI Diploma</strong></div>
-                            <div>Experience: <strong id="wd-experience">3 Years</strong></div>
-                            <div>License: <strong id="wd-license">GOV-891</strong></div>
-                            <div>Hourly Rate: <strong id="wd-rate">₹150/hr</strong></div>
+                            <div><span data-i18n="label_trade">Category</span>: <strong id="wd-category">Electrician</strong></div>
+                            <div><span data-i18n="label_education">Education</span>: <strong id="wd-education">ITI Diploma</strong></div>
+                            <div><span data-i18n="label_experience">Experience</span>: <strong id="wd-experience">3 Years</strong></div>
+                            <div><span data-i18n="label_license">License</span>: <strong id="wd-license">GOV-891</strong></div>
+                            <div><span data-i18n="label_rate">Hourly Rate</span>: <strong id="wd-rate">₹150/hr</strong></div>
                             <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
-                                Approval Status: <span class="badge" id="wd-badge">Pending</span>
+                                <span data-i18n="approval_status">Approval Status</span>: <span class="badge" id="wd-badge">Pending</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Worker Availability Switcher -->
+                        <div class="worker-availability-card" style="margin-top: 10px; margin-bottom: 12px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 11px; font-weight: 700; color: var(--text-main);" data-i18n="my_availability_status">MY LIVE AVAILABILITY:</span>
+                                <span class="badge" id="wd-availability-badge" style="background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3);">🟢 Available Now</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <select id="wd-availability-select" style="flex: 1; padding: 6px; border-radius: var(--radius-sm); font-size: 11px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-light); color: var(--text-main);">
+                                    <option value="true|Available Now">🟢 Available Now</option>
+                                    <option value="false|Busy On Call">🟡 Busy On Call</option>
+                                    <option value="false|Offline">🔴 Offline / Unavailable</option>
+                                </select>
+                                <button type="button" class="btn btn-cyan" id="btn-update-availability" style="padding: 6px 12px; font-size: 11px;" data-i18n="btn_save_status">Save Status</button>
                             </div>
                         </div>
 
@@ -595,7 +699,7 @@
             </main>
 
             <!-- Bottom Smartphone Tab Navigation Bar -->
-            <nav class="app-nav-bar hidden-nav">
+            <nav class="app-nav-bar hidden-nav" id="app-nav-bar">
                 <div class="nav-tab active" data-view="workers">
                     <i class="fa-solid fa-screwdriver-wrench"></i>
                     <span>Services</span>
@@ -630,13 +734,13 @@
             <div class="call-overlay" id="call-overlay" style="display: none;">
                 <div class="call-glow-ring"></div>
                 <div class="call-header">
-                    <div class="emergency-badge"><i class="fa-solid fa-phone-volume"></i> EMERGENCY SERVICES</div>
-                    <div class="call-number">108</div>
+                    <div class="emergency-badge" id="call-badge-title"><i class="fa-solid fa-phone-volume"></i> EMERGENCY SERVICES</div>
+                    <div class="call-number" id="call-number-display">108</div>
                     <div class="call-status" id="call-status">Dialing...</div>
                 </div>
                 
                 <div class="call-avatar-container">
-                    <div class="call-avatar">
+                    <div class="call-avatar" id="call-avatar-icon">
                         <i class="fa-solid fa-truck-medical text-danger"></i>
                     </div>
                 </div>
