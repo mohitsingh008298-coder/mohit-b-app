@@ -255,6 +255,7 @@ body {
     font-weight: 800;
     letter-spacing: -0.5px;
     background: linear-gradient(to right, #ffffff, #d8b4fe);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1583,4 +1584,56 @@ body {
     border-radius: 15px;
     font-weight: 700;
 }
+
+/* ==========================================================================
+   LANGUAGE SELECTOR & AVAILABILITY STATUS STYLES
+   ========================================================================== */
+
+.lang-selector-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 3px 8px;
+    transition: var(--transition-smooth);
+}
+.lang-selector-box:hover {
+    border-color: var(--color-primary);
+    background: rgba(6, 182, 212, 0.08);
+}
+.lang-dropdown {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+}
+.lang-dropdown option {
+    background: #0d1326;
+    color: #fff;
+    font-size: 11px;
+}
+
+.badge-available {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+.badge-busy {
+    background: rgba(234, 179, 8, 0.15) !important;
+    color: #eab308 !important;
+    border: 1px solid rgba(234, 179, 8, 0.35) !important;
+}
+.badge-unavailable {
+    background: rgba(244, 63, 94, 0.15) !important;
+    color: #f43f5e !important;
+    border: 1px solid rgba(244, 63, 94, 0.35) !important;
+}
+
 
